@@ -1,18 +1,31 @@
 package com.qubid.backend.Response;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@Builder
 public class ApiResponse<T> {
     private T data;
-    private String msg;
-    public ApiResponse(T data,String msg){
-        this.data=data;
-        this.msg=msg;
+    private String message;
+    private boolean isError;
+    private String errorMessage;
+
+    public static <T> ApiResponse<T> success(T data, String message) {
+        return ApiResponse.<T>builder()
+                .data(data)
+                .message(message)
+                .isError(false)
+                .build();
     }
 
+    public static <T> ApiResponse<T> error(String message, String error) {
+        return ApiResponse.<T>builder()
+                .message(message)
+                .isError(true)
+                .errorMessage(error)
+                .build();
+    }
 }
