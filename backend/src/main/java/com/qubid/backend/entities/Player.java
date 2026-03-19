@@ -2,6 +2,7 @@ package com.qubid.backend.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,10 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 public class Player extends BaseEntity {
 
+    @NotNull(message = "firstname can't be null")
     private String firstName;
     private String lastName;
     private LocalDate dob;
     private String country;
+
+    @Embedded
+    private Contact contactDetails;
 
     @Embedded
     private Stats stats;
@@ -52,4 +57,19 @@ public class Player extends BaseEntity {
     )
     private List<Tournament> tournamentList = new ArrayList<>();
     // player sport --> single for now
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dob=" + dob +
+                ", country='" + country + '\'' +
+                ", stats=" + stats +
+                ", basePrice=" + basePrice +
+                ", team=" + team +
+                ", skills=" + skills +
+                ", tournamentList=" + tournamentList +
+                '}';
+    }
 }

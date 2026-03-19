@@ -24,7 +24,7 @@ public class Franchise extends BaseEntity{
     @Embedded
     private Contact contact;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Team> teamList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

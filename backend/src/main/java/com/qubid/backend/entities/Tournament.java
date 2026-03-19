@@ -33,7 +33,7 @@ public class Tournament extends  BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Player> players = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "tournament" )
+    @ManyToMany(mappedBy = "tournamentList" )
     List<Franchise> franchiseList = new ArrayList<>();
 
     @OneToMany(mappedBy = "tournament")
