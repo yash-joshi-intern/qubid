@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tournament extends  BaseEntity {
+public class Tournament extends BaseEntity {
 
     private String name;
 
@@ -32,8 +32,9 @@ public class Tournament extends  BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Player> players = new ArrayList<>();
+    //auctonplayer////have to work on this.
 
-    @ManyToMany(mappedBy = "tournament" )
+    @ManyToMany(mappedBy = "tournament")
     List<Franchise> franchiseList = new ArrayList<>();
 
     @OneToMany(mappedBy = "tournament")
