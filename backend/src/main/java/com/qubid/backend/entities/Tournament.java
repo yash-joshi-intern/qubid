@@ -1,6 +1,9 @@
 package com.qubid.backend.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +21,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tournament extends  BaseEntity {
+public class Tournament extends BaseEntity {
 
     private String name;
 
@@ -30,14 +33,14 @@ public class Tournament extends  BaseEntity {
 
     private BigDecimal allotedPurse;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Player> players = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "tournamentList" )
-    List<Franchise> franchiseList = new ArrayList<>();
+    @ManyToMany(mappedBy = "tournaments")
+    private List<Franchise> franchises = new ArrayList<>();
 
     @OneToMany(mappedBy = "tournament")
-    private List<Team> teamList = new ArrayList<>();
+    private List<Team> teams = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "tournaments")
+    private List<Player> players = new ArrayList<>();
 
 
 }
