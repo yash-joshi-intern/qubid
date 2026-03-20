@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="/api/player")
+@RequestMapping(path = "/api/player")
 public class PlayerController {
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<Player>> addPlayer(@RequestBody @Valid Player player){
+    public ResponseEntity<ApiResponse<Player>> addPlayer(@RequestBody @Valid Player player) {
         //for testing,implementation pending
-        return ResponseEntity.status(HttpStatus.CREATED).body( ApiResponse.<Player>success(player, "player created"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.<Player>success(player, "player created"));
     }
 
 }
+

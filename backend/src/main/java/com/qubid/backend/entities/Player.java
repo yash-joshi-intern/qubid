@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Player extends BaseEntity {
 
-    @NotNull(message = "firstname can't be null")
+    @NotNull(message = "firstName can't be null")
     private String firstName;
     private String lastName;
     private LocalDate dob;
@@ -28,50 +28,29 @@ public class Player extends BaseEntity {
     @Embedded
     private Contact contactDetails;
 
-    @Embedded
     private Stats stats;
 
-    @OneToMany(mappedBy = "player")
-    private List<BasePrice> basePrice;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BasePrice> basePrices = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "player_team",
+    @JoinTable(name = "player_team",
             joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id")
-    )
-    private List<Team> team;
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    private List<Team> teams = new ArrayList<>();
 
-    // many-to-many with skills
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "player_skill",
+    @JoinTable(name = "player_skill",
             joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skills = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "player_tournament",
+    @JoinTable(name = "player_tournament",
             joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "tournament_id")
-    )
-    private List<Tournament> tournamentList = new ArrayList<>();
-    // player sport --> single for now
+            inverseJoinColumns = @JoinColumn(name = "tournament_id"))
+    private List<Tournament> tournaments = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", dob=" + dob +
-                ", country='" + country + '\'' +
-                ", stats=" + stats +
-                ", basePrice=" + basePrice +
-                ", team=" + team +
-                ", skills=" + skills +
-                ", tournamentList=" + tournamentList +
-                '}';
-    }
+    @OneToMany(mappedBy = "player")
+    private List<AuctionPlayer> auctionPlayers = new ArrayList<>();
 }
