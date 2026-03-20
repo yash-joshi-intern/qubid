@@ -12,27 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "franchiese")
+@Table(name = "teams")   // was "franchiese" — same as Franchise!
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Team extends  BaseEntity{
+public class Team extends BaseEntity {
 
     private String name;
-
     private Integer minPlayers;
     private Integer maxPlayers;
-
     private BigDecimal remainingPurse;
 
     @Embedded
     private Contact contact;
 
-    @ManyToMany(mappedBy = "team",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "teams", fetch = FetchType.LAZY)
     private List<Player> players = new ArrayList<>();
 
-    // which franchise owns this team
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchise_id")
     private Franchise franchise;
@@ -40,5 +37,4 @@ public class Team extends  BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
-
 }

@@ -14,16 +14,16 @@ import java.math.BigInteger;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasePrice extends BaseEntity{
+public class BasePrice extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id")
-    Player player;
+    private Player player;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id")
-    Tournament tournament;
+    private Tournament tournament;
 
-    BigInteger basePrice;
+    private BigInteger basePrice;
 
 }
