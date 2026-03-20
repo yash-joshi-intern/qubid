@@ -1,26 +1,34 @@
 ALTER TABLE auction_auction_player
-    DROP CONSTRAINT fk_aucaucpla_on_auction;
+DROP
+CONSTRAINT fk_aucaucpla_on_auction;
 
 ALTER TABLE auction_auction_player
-    DROP CONSTRAINT fk_aucaucpla_on_auction_player;
+DROP
+CONSTRAINT fk_aucaucpla_on_auction_player;
 
 ALTER TABLE bids
-    DROP CONSTRAINT fk_bids_on_auction;
+DROP
+CONSTRAINT fk_bids_on_auction;
 
 ALTER TABLE bids
-    DROP CONSTRAINT fk_bids_on_franchise;
+DROP
+CONSTRAINT fk_bids_on_franchise;
 
 ALTER TABLE franchise_tournament
-    DROP CONSTRAINT fk_fratou_on_franchise;
+DROP
+CONSTRAINT fk_fratou_on_franchise;
 
 ALTER TABLE player_team
-    DROP CONSTRAINT fk_platea_on_team;
+DROP
+CONSTRAINT fk_platea_on_team;
 
 ALTER TABLE tournaments_players
-    DROP CONSTRAINT fk_toupla_on_player;
+DROP
+CONSTRAINT fk_toupla_on_player;
 
 ALTER TABLE tournaments_players
-    DROP CONSTRAINT fk_toupla_on_tournament;
+DROP
+CONSTRAINT fk_toupla_on_tournament;
 
 CREATE TABLE franchises
 (
@@ -131,7 +139,8 @@ DROP TABLE franchiese CASCADE;
 DROP TABLE tournaments_players CASCADE;
 
 ALTER TABLE bids
-    DROP COLUMN auction_id;
+DROP
+COLUMN auction_id;
 
 ALTER TABLE players
     ALTER COLUMN first_name SET NOT NULL;
