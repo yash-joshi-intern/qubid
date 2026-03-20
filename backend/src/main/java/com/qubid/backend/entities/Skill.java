@@ -1,6 +1,9 @@
 package com.qubid.backend.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,19 +18,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Skill {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Skill extends BaseEntity {
 
     private String name;
-    private Integer rating;        // numeric rating for skill
+    private Integer rating;
     private Integer yearsOfExp;
     private String expertiseLevel;
 
     @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
     private List<Player> players = new ArrayList<>();
-
-
 }
