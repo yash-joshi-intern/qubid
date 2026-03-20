@@ -1,9 +1,7 @@
 package com.qubid.backend.entities;
 
 import com.qubid.backend.enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Auction extends BaseEntity{
+public class Auction extends BaseEntity {
 
     private String venue;
 
@@ -27,10 +25,13 @@ public class Auction extends BaseEntity{
 
     private LocalDate eventDate;
 
-    private String Title;
+    private String title;
 
-    @ManyToMany(mappedBy = "auctionList")
+    @OneToMany(mappedBy = "auction")
     private List<AuctionPlayer> auctionPlayerList = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
 
 }
