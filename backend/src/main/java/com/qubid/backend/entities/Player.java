@@ -25,10 +25,11 @@ public class Player extends BaseEntity {
     private LocalDate dob;
     private String country;
 
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    private List<Stats> stats;
+  
     @Embedded
     private Contact contactDetails;
-
-    private Stats stats;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BasePrice> basePrices = new ArrayList<>();
