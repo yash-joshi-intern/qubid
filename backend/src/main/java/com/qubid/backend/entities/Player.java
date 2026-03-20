@@ -21,8 +21,8 @@ public class Player extends BaseEntity {
     private LocalDate dob;
     private String country;
 
-    @Embedded
-    private Stats stats;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    private List<Stats> stats;
 
     @OneToMany(mappedBy = "player")
     private List<BasePrice> basePrice;
