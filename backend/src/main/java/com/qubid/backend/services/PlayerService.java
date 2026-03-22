@@ -1,24 +1,28 @@
 package com.qubid.backend.services;
 
+import com.qubid.backend.dto.request.PlayerRequestDTO;
+import com.qubid.backend.dto.response.PlayerResponseDTO;
 import com.qubid.backend.entities.*;
 
 import java.util.List;
 
 public interface PlayerService {
 
-    public String addPlayer(Player player);
+    String addPlayer(PlayerRequestDTO playerRequestDTO);
 
-    public String addListOfPlayer(List<Player> playerList);
+    String addListOfPlayer(List<PlayerRequestDTO> playerDTOList);
 
-    public Player updatePlayer(Long playerID, Player player);
+    PlayerResponseDTO updatePlayer(Long playerID, PlayerRequestDTO playerRequestDTO);
 
-    public Player getPlayerById(Long playerID);
+    PlayerResponseDTO getPlayerById(Long playerID);
 
-    public List<Player> getListOfPlayer(List<Long> playerIdList);
+    List<PlayerResponseDTO> getListOfPlayer(List<Long> playerIdList);
 
-    public String deletePlayer(Long playerID);
+    String deletePlayer(Long playerID);
 
-    public String deleteListOfPlayer(List<Long> playerID);
+    String deleteListOfPlayer(List<Long> playerIDs);
+
+    //remaining --> Check from here
 
     public Stats getPlayerState(Long playerIdD);
 

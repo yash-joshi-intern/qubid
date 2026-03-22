@@ -1,34 +1,36 @@
 package com.qubid.backend.services;
 
+import com.qubid.backend.dto.request.TeamRequestDTO;
+import com.qubid.backend.dto.response.TeamResponseDTO;
 import com.qubid.backend.entities.Player;
-import com.qubid.backend.entities.Team;
 
 import java.util.List;
 
 public interface TeamService {
 
-    public String addTeam(Team team);
+    String addTeam(TeamRequestDTO requestDTO);
 
-    public String addMultipleTeams(List<Team> teamList);
+    String addMultipleTeams(List<TeamRequestDTO> teamList);
 
-    public Team getTeam(Long teamId);
+    TeamResponseDTO getTeam(Long teamId);
 
-    public List<Team> getListOfTeam(List<Long> integerList);
+    List<TeamResponseDTO> getListOfTeam(List<Long> teamIds);
 
-    public Team modifyTeam(Long id, Team team);
+    TeamResponseDTO modifyTeam(Long id, TeamRequestDTO requestDTO);
 
-    public String deleteTeam(Long teamId);
+    String deleteTeam(Long teamId);
 
-    public Integer getRemainingPlayerInTeam(Long TeamId);
+    Integer getRemainingPlayerSlots(Long teamId);
 
-    //player and team services
-    public String addOnPlayerInTeam(Long teamId, Player player);
+    // Player ↔ Team operations
+    String addOnePlayerInTeam(Long teamId, Long playerId);
 
-    public String addListOfPlayerInTeam(Long teamId, List<Long> playerList);
+    String addListOfPlayerInTeam(Long teamId, List<Long> playerIds);
 
-    public List<Player> getListOfPlayerForTeam(Long teamId);
+    List<Player> getListOfPlayerForTeam(Long teamId);
 
-    public String deleteListOfPlayerInTeam(List<Long> listOfPlayer);
+    // Fixed signature — teamId is required to know which team
+    String deleteListOfPlayerInTeam(Long teamId, List<Long> playerIds);
 
     //many team can have the franchieses and tournaments to those will have the
     // the seperate service method and the various method for each operations
