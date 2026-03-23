@@ -1,11 +1,13 @@
 package com.qubid.backend.entities;
 
+import com.qubid.backend.enums.AuctionPlayerStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,4 +33,14 @@ public class AuctionPlayer extends BaseEntity {
 
     @OneToMany(mappedBy = "auctionPlayer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bid> bids = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuctionPlayerStatus status = AuctionPlayerStatus.PENDING;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sold_to_franchise_id")
+    private Franchise soldToFranchise;
+
+    private BigDecimal finalSoldPrice;
 }

@@ -1,6 +1,6 @@
 package com.qubid.backend.entities;
 
-import com.qubid.backend.enums.Status;
+import com.qubid.backend.enums.AuctionStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,9 @@ public class Auction extends BaseEntity {
 
     private String venue;
 
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuctionStatus status;
 
     private LocalDate eventDate;
 
