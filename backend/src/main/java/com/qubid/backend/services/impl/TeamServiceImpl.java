@@ -11,11 +11,13 @@ import com.qubid.backend.repository.TeamRepository;
 import com.qubid.backend.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
 

@@ -32,4 +32,25 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error("Some Error Occurred", e.getMessage()));
     }
+
+    @ExceptionHandler(PlayerNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handlePlayerNotFoundException(PlayerNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error("Player Not Found", e.getMessage()));
+    }
+
+    @ExceptionHandler(TeamNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTeamNotFoundException(TeamNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error("Team Not Found", e.getMessage()));
+    }
+
+    @ExceptionHandler(TournamentNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTournamentNotFoundException(TournamentNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error("Tournament Not Found", e.getMessage()));
+    }
 }
