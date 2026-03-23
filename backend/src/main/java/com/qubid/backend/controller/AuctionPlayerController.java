@@ -17,7 +17,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auction-player")
+@RequestMapping("/auction-player")
 @RequiredArgsConstructor
 public class AuctionPlayerController {
 

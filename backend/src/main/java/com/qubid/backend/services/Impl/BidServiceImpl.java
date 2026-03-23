@@ -10,7 +10,6 @@ import com.qubid.backend.repository.BidRepository;
 import com.qubid.backend.services.BidService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +17,10 @@ import java.util.List;
 
 @Service
 @Transactional
-
 @RequiredArgsConstructor
 public class BidServiceImpl implements BidService {
 
     private final BidRepository bidRepository;
-    private final ModelMapper modelMapper;
     private final AuctionRepository auctionRepository;
 
     @Override
@@ -44,7 +41,7 @@ public class BidServiceImpl implements BidService {
     @Override
     public List<BidDTO> getAllByAuction(Long auctionId) {
         return bidRepository
-                .findAllByAuctionId(auctionId)
+                .findAllByAuctionPlayer_AuctionId(auctionId)
                 .stream()
                 .map(this::toBidDTO)
                 .toList();

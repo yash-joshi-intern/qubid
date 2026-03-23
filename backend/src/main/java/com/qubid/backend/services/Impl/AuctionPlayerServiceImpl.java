@@ -8,7 +8,10 @@ import com.qubid.backend.entities.BasePrice;
 import com.qubid.backend.entities.Player;
 import com.qubid.backend.enums.AuctionPlayerStatus;
 import com.qubid.backend.enums.AuctionStatus;
-import com.qubid.backend.repository.*;
+import com.qubid.backend.repository.AuctionPlayerRepository;
+import com.qubid.backend.repository.AuctionRepository;
+import com.qubid.backend.repository.BasePriceRepository;
+import com.qubid.backend.repository.PlayerRepository;
 import com.qubid.backend.services.AuctionPlayerService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +33,6 @@ public class AuctionPlayerServiceImpl implements AuctionPlayerService {
     private final AuctionPlayerRepository auctionPlayerRepository;
     private final AuctionRepository auctionRepository;
     private final PlayerRepository playerRepository;
-    private final FranchiseRepository franchiseRepository;
     private final BasePriceRepository basePriceRepository;
 
 
@@ -53,10 +55,11 @@ public class AuctionPlayerServiceImpl implements AuctionPlayerService {
         }
         auctionPlayer.setPlayer(player);
 
-        BasePrice basePrice = new BasePrice();
-        basePrice.setPlayer(player);
-        basePrice.setTournament(auction.getTournament());
-        basePrice.setBasePrice(auctionPlayerRequestDTO.getBasePrice());
+        BasePrice basePrice = BasePrice.builder()
+                .player(player)
+                .tournament(auction.getTournament())
+                .basePrice(auctionPlayerRequestDTO.getBasePrice())
+                .build();
 
         BasePrice save = basePriceRepository.save(basePrice);
 

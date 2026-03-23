@@ -128,18 +128,10 @@ public class AuctionServiceImpl implements AuctionService {
             throw new IllegalStateException("auction player " + auctionPlayer.getId() + " is not Live For Auction yet");
         }
 
-        Franchise franchise = franchiseRepository.findById(request.getFranchiseId()).orElseThrow(() -> {
-            throw new EntityNotFoundException("Franchise Not FOund : " + request.getFranchiseId());
-        });
+        Franchise franchise = franchiseRepository.findById(request.getFranchiseId()).orElseThrow(() ->
+                new EntityNotFoundException("Franchise Not FOund : " + request.getFranchiseId())
+        );
 
-//        Team team1 = franchise
-//                .getTeams()
-//                .stream()
-//                .filter(team -> team.getTournament().getId() == auction.getTournament().getId())
-//                .findFirst()
-//                .orElseThrow(() -> {
-//                    throw new EntityNotFoundException("Team Not Found");
-//                });
         Team team1 = teamRepository
                 .findByFranchiseIdAndTournamentId(franchise.getId(), auction.getTournament().getId())
                 .orElseThrow(() -> new EntityNotFoundException("No team Found For franchise " + franchise.getName() + "and tournament " + auction.getTournament().getName()));

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bid")
+@RequestMapping("/bid")
 @RequiredArgsConstructor
 public class BidController {
     private final BidService bidService;
@@ -94,7 +94,7 @@ public class BidController {
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(result, "Sold bids fetched successfully"));
     }
-    
+
     @GetMapping("/unsold")
     public ResponseEntity<ApiResponse<List<BidDTO>>> getUnsoldBids() {
 

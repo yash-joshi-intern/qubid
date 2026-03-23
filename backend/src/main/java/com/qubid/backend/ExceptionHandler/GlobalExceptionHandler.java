@@ -14,7 +14,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> errorMap = new HashMap<>();
-//        System.out.println(e.getBindingResult());
         e.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String msg = error.getDefaultMessage();
@@ -23,10 +22,4 @@ public class GlobalExceptionHandler {
         return errorMap;
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiResponse<Object>> handleException(Exception e) {
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(ApiResponse.error("Some Error Occurred", e.getMessage()));
-//    }
 }
