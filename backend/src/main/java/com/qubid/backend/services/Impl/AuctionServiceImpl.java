@@ -276,6 +276,13 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionDTO getById(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new EntityNotFoundException("No Auction found with ID:" + auctionId));
         AuctionDTO auctionDTO = modelMapper.map(auction, AuctionDTO.class);
+        auctionDTO.setAuctionPlayers(
+                auction
+                        .getAuctionPlayerList()
+                        .stream()
+                        .map(this::toAuctionPlayerDto)
+                        .toList()
+        );
         return auctionDTO;
     }
 
