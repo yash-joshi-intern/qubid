@@ -1,6 +1,6 @@
 package com.qubid.backend.controller;
 
-import com.qubid.backend.Response.ApiResponse;
+import com.qubid.backend.dtos.Response.ApiResponse;
 import com.qubid.backend.entities.Player;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

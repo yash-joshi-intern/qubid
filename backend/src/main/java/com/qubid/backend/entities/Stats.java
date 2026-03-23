@@ -14,6 +14,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"player_id", "cricket_format"}
+        )
+)
 public class Stats extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

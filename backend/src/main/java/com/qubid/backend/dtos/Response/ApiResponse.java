@@ -1,4 +1,4 @@
-package com.qubid.backend.Response;
+package com.qubid.backend.dtos.Response;
 
 import lombok.Builder;
 import lombok.Getter;
