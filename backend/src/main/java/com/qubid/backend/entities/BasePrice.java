@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "base_price")
@@ -24,6 +24,8 @@ public class BasePrice extends BaseEntity {
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
-    private BigInteger basePrice;
+    private BigDecimal basePrice;   /* BigInteger changed to BigDecimal becz of mismatch,
+    BigInteger basePrice but the DB column is base_price DECIMAL. BigInteger can't store decimals.
+    This will break Hibernate at startup or silently truncate data. */
 
 }
