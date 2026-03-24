@@ -1,10 +1,11 @@
 package com.qubid.backend.controller;
 
+import com.qubid.backend.Response.ApiResponse;
 import com.qubid.backend.dtos.Request.StatRequestDTO;
-import com.qubid.backend.dtos.Response.ApiResponse;
 import com.qubid.backend.dtos.Response.StatResponseDTO;
 import com.qubid.backend.enums.CricketFormat;
 import com.qubid.backend.services.StatService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class StatController {
 
@@ -21,7 +21,7 @@ public class StatController {
     @PostMapping("/players/{playerId}/stats")
     public ResponseEntity<ApiResponse<StatResponseDTO>> createStats(
             @PathVariable Long playerId,
-            @RequestBody StatRequestDTO request
+            @Valid @RequestBody StatRequestDTO request
     ) {
         StatResponseDTO data = statService.createStats(playerId, request);
 
@@ -33,11 +33,11 @@ public class StatController {
     @PutMapping("/stats/{statsId}")
     public ResponseEntity<ApiResponse<StatResponseDTO>> updateStats(
             @PathVariable Long statsId,
-            @RequestBody StatRequestDTO request
+            @Valid @RequestBody StatRequestDTO request
     ) {
         StatResponseDTO data = statService.updateStats(statsId, request);
 
-        return ResponseEntity.status(201).body(ApiResponse.success(data, "Stats updated Successfully"));
+        return ResponseEntity.status(200).body(ApiResponse.success(data, "Stats updated Successfully"));
     }
 
     @GetMapping("/players/{playerId}/stats")
