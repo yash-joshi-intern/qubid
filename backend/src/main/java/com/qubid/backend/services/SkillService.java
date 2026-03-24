@@ -2,6 +2,7 @@ package com.qubid.backend.services;
 
 import com.qubid.backend.dtos.Request.SkillRequestDto;
 import com.qubid.backend.dtos.Response.SkillDto;
+import com.qubid.backend.dtos.Response.SkillPlayerDTO;
 import com.qubid.backend.dtos.Response.SkillResponseDto;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public interface SkillService {
 
     // Delete skill by id
     void deleteSkill(Long id);
+
+    // Fetch Player by skill id
+    public SkillPlayerDTO getPlayersBySkillId(Long id);
 
     // --- Optional / Extended Operations ---
 

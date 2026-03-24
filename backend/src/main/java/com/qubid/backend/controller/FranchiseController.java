@@ -12,9 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/franchise")
+@RequestMapping("/franchise")
 @RequiredArgsConstructor
 public class FranchiseController {
     private final FranchiseService franchiseService;
@@ -58,21 +59,19 @@ public class FranchiseController {
                 .body(ApiResponse.success(franchiseService.getAllFranchisesWithDetails(), "Franchise Details List"));
     }
 
-    @GetMapping("/search/by-name")
-    public ResponseEntity<ApiResponse<FranchiseDto>> getFranchiseByName(@RequestParam String name) {
-        FranchiseDto franchiseDto = franchiseService.getFranchiseByName(name)
-                .orElseThrow(() -> new RuntimeException("Franchise not found"));
+    @GetMapping("/search-by-name")
+    public ResponseEntity<ApiResponse<Optional<FranchiseDto>>> getFranchiseByName(@RequestParam String name) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(franchiseDto, "Franchise Fetched"));
+                .body(ApiResponse.success(franchiseService.getFranchiseByName(name), "Franchise Fetched"));
     }
 
-    @GetMapping("/search/by-country")
+    @GetMapping("/search-by-country")
     public ResponseEntity<ApiResponse<List<FranchiseDto>>> getFranchisesByCountry(@RequestParam String country) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(franchiseService.getFranchisesByCountry(country), "Franchises By Country"));
     }
 
-    @GetMapping("/search/by-name-like")
+    @GetMapping("/search-by-name-like")
     public ResponseEntity<ApiResponse<List<FranchiseDto>>> searchFranchisesByName(@RequestParam String namePart) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(franchiseService.searchFranchisesByName(namePart), "Franchise Search Result"));
