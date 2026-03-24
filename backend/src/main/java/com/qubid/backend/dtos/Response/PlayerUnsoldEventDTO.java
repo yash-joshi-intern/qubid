@@ -2,12 +2,14 @@ package com.qubid.backend.dtos.Response;
 
 import com.qubid.backend.enums.AuctionPlayerStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PlayerUnsoldEventDTO {
     private Long auctionPlayerId;
     private Long playerId;
