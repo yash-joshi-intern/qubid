@@ -1,16 +1,21 @@
 package com.qubid.backend.services.impl;
 
 import com.qubid.backend.ExceptionHandler.PlayerNotFoundException;
-import com.qubid.backend.dto.request.PlayerRequestDTO;
-import com.qubid.backend.dto.response.PlayerResponseDTO;
+import com.qubid.backend.ExceptionHandler.TournamentNotFoundException;
+import com.qubid.backend.dtos.Request.PlayerRequestDTO;
+import com.qubid.backend.dtos.Response.PlayerResponseDTO;
+import com.qubid.backend.dtos.Response.SkillResponseDTO;
+import com.qubid.backend.dtos.Response.TeamResponseDTO;
+import com.qubid.backend.dtos.Response.TournamentResponseDTO;
 import com.qubid.backend.entities.*;
-import com.qubid.backend.repository.PlayerRepository;
+import com.qubid.backend.repository.*;
 import com.qubid.backend.services.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
 
@@ -20,6 +25,10 @@ public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
     private final ModelMapper modelMapper;
+    private final TournamentRepository tournamentRepository;
+    private final AuctionRepository auctionRepository;
+    private final BasePriceRepository basePriceRepository;
+    private final AuctionPlayerRepository auctionPlayerRepository;
 
     @Override
     public String addPlayer(PlayerRequestDTO playerRequestDTO) {
@@ -34,6 +43,7 @@ public class PlayerServiceImpl implements PlayerService {
         List<Player> players = playerDTOList.stream()
                 .map(dto -> modelMapper.map(dto, Player.class))
                 .toList();
+
         playerRepository.saveAll(players);
         return "Player List added successfully";
     }
@@ -49,16 +59,14 @@ public class PlayerServiceImpl implements PlayerService {
 
         existing.setUpdatedAt(Instant.now());
 
-        Player player = playerRepository.save(existing);
-
-        return modelMapper.map(player, PlayerResponseDTO.class);
+        Player saved = playerRepository.save(existing);
+        return modelMapper.map(saved, PlayerResponseDTO.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PlayerResponseDTO getPlayerById(Long playerID) {
-        Player player = playerRepository.findById(playerID)
-                .orElseThrow(() -> new PlayerNotFoundException(playerID));
+        Player player = findPlayerOrThrow(playerID);
         return modelMapper.map(player, PlayerResponseDTO.class);
     }
 
@@ -79,8 +87,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     @Transactional
     public String deletePlayer(Long playerID) {
-        Player player = playerRepository.findById(playerID)
-                .orElseThrow(() -> new PlayerNotFoundException(playerID));
+        Player player = findPlayerOrThrow(playerID);
         playerRepository.delete(player);
         return "Player deleted successfully";
     }
@@ -99,32 +106,84 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Stats getPlayerState(Long playerIdD) {
-        return null;
+    @Transactional(readOnly = true)
+    public List<SkillResponseDTO> getListOfSkillsForPlayerID(Long playerID) {
+        Player player = findPlayerOrThrow(playerID);
+
+        if (player.getSkills().isEmpty()) {
+            throw new RuntimeException("No skills found for player ID: " + playerID);
+        }
+
+        return player.getSkills().stream()
+                .map(skill -> modelMapper.map(skill, SkillResponseDTO.class))
+                .toList();
     }
 
     @Override
-    public Stats updatePlayerStats(Long playerId, Stats stats) {
-        return null;
+    @Transactional(readOnly = true)
+    public List<TeamResponseDTO> getListOfTeamForPlayerID(Long playerID) {
+        Player player = findPlayerOrThrow(playerID);
+
+        if (player.getTeams().isEmpty()) {
+            throw new RuntimeException("No teams found for player ID: " + playerID);
+        }
+
+        return player.getTeams().stream()
+                .map(team -> modelMapper.map(team, TeamResponseDTO.class))
+                .toList();
     }
 
     @Override
-    public List<BasePrice> getBasePriceForPlayerId(Long playerID) {
-        return List.of();
+    @Transactional(readOnly = true)
+    public List<TournamentResponseDTO> getListOfTournamentForPlayerID(Long playerID) {
+        Player player = findPlayerOrThrow(playerID);
+
+        if (player.getTournaments().isEmpty()) {
+            throw new RuntimeException("No tournaments found for player ID: " + playerID);
+        }
+
+        return player.getTournaments().stream()
+                .map(tournament -> modelMapper.map(tournament, TournamentResponseDTO.class))
+                .toList();
     }
 
-    @Override
-    public List<Skill> getListOfSkillsForPlayerID(Long playerID) {
-        return List.of();
-    }
 
     @Override
-    public List<Team> getLisOfTeamForPlayerID(Long playerID) {
-        return List.of();
+    @Transactional
+    public String addLivePlayerInTournament(Long playerId, Long tournamentId, BigInteger basePrice) {
+
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new PlayerNotFoundException(playerId));
+
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new TournamentNotFoundException(tournamentId));
+
+        AuctionPlayer auctionPlayer = new AuctionPlayer();
+
+        Auction auction = auctionRepository.findAllByTournamentId(tournamentId)
+                .orElseThrow(() -> new TournamentNotFoundException(tournamentId));
+
+        BasePrice basePriceObj = BasePrice.builder()
+                .basePrice(basePrice)
+                .player(player)
+                .tournament(tournament)
+                .build();
+
+        basePriceRepository.save(basePriceObj);
+
+        auctionPlayer.setBasePrice(basePriceObj);
+        auctionPlayer.setPlayer(player);
+        auctionPlayer.getBasePrice().setBasePrice(basePrice);
+        auctionPlayer.setAuction(auction);
+
+        auctionPlayerRepository.save(auctionPlayer);
+
+        return "Auction Player Added Successfully";
     }
 
-    @Override
-    public List<Tournament> getListOfTournamentForPlayerID(Long playerID) {
-        return List.of();
+    //helper
+    private Player findPlayerOrThrow(Long id) {
+        return playerRepository.findById(id)
+                .orElseThrow(() -> new PlayerNotFoundException(id));
     }
 }

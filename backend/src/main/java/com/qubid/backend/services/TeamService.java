@@ -1,8 +1,8 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dto.request.TeamRequestDTO;
-import com.qubid.backend.dto.response.TeamResponseDTO;
-import com.qubid.backend.entities.Player;
+import com.qubid.backend.dtos.Request.TeamRequestDTO;
+import com.qubid.backend.dtos.Response.PlayerResponseDTO;
+import com.qubid.backend.dtos.Response.TeamResponseDTO;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface TeamService {
 
     String addListOfPlayerInTeam(Long teamId, List<Long> playerIds);
 
-    List<Player> getListOfPlayerForTeam(Long teamId);
+    List<PlayerResponseDTO> getListOfPlayerForTeam(Long teamId);
 
     // Fixed signature — teamId is required to know which team
     String deleteListOfPlayerInTeam(Long teamId, List<Long> playerIds);

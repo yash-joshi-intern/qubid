@@ -1,10 +1,10 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dto.request.TournamentRequestDTO;
-import com.qubid.backend.dto.response.TournamentResponseDTO;
-import com.qubid.backend.entities.Franchise;
-import com.qubid.backend.entities.Player;
-import com.qubid.backend.entities.Team;
+import com.qubid.backend.dtos.Request.TournamentRequestDTO;
+import com.qubid.backend.dtos.Response.FranchiseResponseForTournamentDTO;
+import com.qubid.backend.dtos.Response.PlayerResponseDTO;
+import com.qubid.backend.dtos.Response.TeamResponseDTO;
+import com.qubid.backend.dtos.Response.TournamentResponseDTO;
 
 import java.util.List;
 
@@ -25,11 +25,11 @@ public interface TournamentService {
     String deleteListOfTournament(List<Long> listOfTournamentId);
 
     // Fetch related entities by tournament
-    List<Player> getPlayerListByTournamentId(Long tournamentId);
+    List<PlayerResponseDTO> getPlayerListByTournamentId(Long tournamentId);
 
-    List<Franchise> getFranchiseListByTournamentId(Long tournamentId);
+    List<FranchiseResponseForTournamentDTO> getFranchiseListByTournamentId(Long tournamentId);  // was List<Franchise>
 
-    List<Team> getTeamListByTournamentId(Long tournamentId);
+    List<TeamResponseDTO> getTeamListByTournamentId(Long tournamentId);            // was List<Team>
 
     // Team ↔ Tournament operations
     // List<Long> instead of List<Team> — cleaner, consistent with other services

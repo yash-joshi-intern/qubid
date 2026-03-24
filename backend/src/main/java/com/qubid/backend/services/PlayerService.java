@@ -1,9 +1,12 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dto.request.PlayerRequestDTO;
-import com.qubid.backend.dto.response.PlayerResponseDTO;
-import com.qubid.backend.entities.*;
+import com.qubid.backend.dtos.Request.PlayerRequestDTO;
+import com.qubid.backend.dtos.Response.PlayerResponseDTO;
+import com.qubid.backend.dtos.Response.SkillResponseDTO;
+import com.qubid.backend.dtos.Response.TeamResponseDTO;
+import com.qubid.backend.dtos.Response.TournamentResponseDTO;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface PlayerService {
@@ -24,22 +27,12 @@ public interface PlayerService {
 
     //remaining --> Check from here
 
-    public Stats getPlayerState(Long playerIdD);
+    List<SkillResponseDTO> getListOfSkillsForPlayerID(Long playerID);
 
-    public Stats updatePlayerStats(Long playerId, Stats stats);
+    List<TeamResponseDTO> getListOfTeamForPlayerID(Long playerID);
 
-    public List<BasePrice> getBasePriceForPlayerId(Long playerID);
-    //can be add multiple service for the baseprice but it will be inside the baseprice service
-    // add, update, delete based on PlayerID
+    List<TournamentResponseDTO> getListOfTournamentForPlayerID(Long playerID);
 
-    public List<Skill> getListOfSkillsForPlayerID(Long playerID);
-    //here also Skills realted services can be mentioned, but it will be inside the specific skill service where the id of player will
-    // be given and after the various operations can be done.
-    // add, update, delete based on PlayerID
-
-    public List<Team> getLisOfTeamForPlayerID(Long playerID);
-    // same as above
-
-    public List<Tournament> getListOfTournamentForPlayerID(Long playerID);
+    String addLivePlayerInTournament(Long playerId, Long tournamentId, BigInteger basePrice);
 
 }

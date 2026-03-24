@@ -1,10 +1,7 @@
 package com.qubid.backend.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -14,6 +11,7 @@ import java.math.BigInteger;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BasePrice extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

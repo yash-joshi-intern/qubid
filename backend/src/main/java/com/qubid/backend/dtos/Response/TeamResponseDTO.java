@@ -1,4 +1,4 @@
-package com.qubid.backend.dto.response;
+package com.qubid.backend.dtos.Response;
 
 import com.qubid.backend.entities.Contact;
 import lombok.*;

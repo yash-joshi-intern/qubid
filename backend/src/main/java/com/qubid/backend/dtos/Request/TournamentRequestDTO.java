@@ -1,4 +1,4 @@
-package com.qubid.backend.dto.request;
+package com.qubid.backend.dtos.Request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

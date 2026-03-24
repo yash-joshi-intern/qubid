@@ -2,10 +2,11 @@ package com.qubid.backend.services.impl;
 
 import com.qubid.backend.ExceptionHandler.TeamNotFoundException;
 import com.qubid.backend.ExceptionHandler.TournamentNotFoundException;
-import com.qubid.backend.dto.request.TournamentRequestDTO;
-import com.qubid.backend.dto.response.TournamentResponseDTO;
-import com.qubid.backend.entities.Franchise;
-import com.qubid.backend.entities.Player;
+import com.qubid.backend.dtos.Request.TournamentRequestDTO;
+import com.qubid.backend.dtos.Response.FranchiseResponseForTournamentDTO;
+import com.qubid.backend.dtos.Response.PlayerResponseDTO;
+import com.qubid.backend.dtos.Response.TeamResponseDTO;
+import com.qubid.backend.dtos.Response.TournamentResponseDTO;
 import com.qubid.backend.entities.Team;
 import com.qubid.backend.entities.Tournament;
 import com.qubid.backend.repository.TeamRepository;
@@ -110,20 +111,35 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Player> getPlayerListByTournamentId(Long tournamentId) {
-        return findTournamentOrThrow(tournamentId).getPlayers();
+    public List<PlayerResponseDTO> getPlayerListByTournamentId(Long tournamentId) {
+        Tournament tournament = findTournamentOrThrow(tournamentId);
+
+        return tournament.getPlayers()
+                .stream()
+                .map(player -> modelMapper.map(player, PlayerResponseDTO.class))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Franchise> getFranchiseListByTournamentId(Long tournamentId) {
-        return findTournamentOrThrow(tournamentId).getFranchises();
+    public List<FranchiseResponseForTournamentDTO> getFranchiseListByTournamentId(Long tournamentId) {
+        Tournament tournament = findTournamentOrThrow(tournamentId);
+
+        return tournament.getFranchises()
+                .stream()
+                .map(franchise -> modelMapper.map(franchise, FranchiseResponseForTournamentDTO.class))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Team> getTeamListByTournamentId(Long tournamentId) {
-        return findTournamentOrThrow(tournamentId).getTeams();
+    public List<TeamResponseDTO> getTeamListByTournamentId(Long tournamentId) {
+        Tournament tournament = findTournamentOrThrow(tournamentId);
+
+        return tournament.getTeams()
+                .stream()
+                .map(team -> modelMapper.map(team, TeamResponseDTO.class))
+                .toList();
     }
 
     @Override
@@ -134,13 +150,12 @@ public class TournamentServiceImpl implements TournamentService {
 
         Set<Long> existingTeamIds = tournament.getTeams()
                 .stream()
-                .map(t -> t.getId())
+                .map(Team::getId)
                 .collect(Collectors.toSet());
 
         List<Long> duplicates = teamIds.stream()
-                .filter(teamId -> existingTeamIds.contains(teamId))
+                .filter(existingTeamIds::contains)
                 .toList();
-
 
         if (!duplicates.isEmpty()) {
             throw new RuntimeException(
@@ -148,9 +163,12 @@ public class TournamentServiceImpl implements TournamentService {
             );
         }
 
-        tournament.getTeams().addAll(teamsToAdd);
-        tournamentRepository.save(tournament);
+        teamsToAdd.forEach(team -> {
+            team.setTournament(tournament);
+            tournament.getTeams().add(team);
+        });
 
+        teamRepository.saveAll(teamsToAdd);
         return "Teams added successfully";
     }
 
@@ -160,11 +178,17 @@ public class TournamentServiceImpl implements TournamentService {
         Tournament tournament = findTournamentOrThrow(tournamentId);
         List<Team> newTeams = fetchTeamsOrThrow(teamIds);
 
-        // Clear existing links and re-link with new list
-        tournament.getTeams().clear();
-        tournament.getTeams().addAll(newTeams);
+        tournament.getTeams().forEach(team -> team.setTournament(null));
+        teamRepository.saveAll(tournament.getTeams());
 
-        tournamentRepository.save(tournament);
+        tournament.getTeams().clear();
+
+        newTeams.forEach(team -> {
+            team.setTournament(tournament);
+            tournament.getTeams().add(team);  // in-memory sync
+        });
+
+        teamRepository.saveAll(newTeams);
         return "Tournament teams updated successfully";
     }
 

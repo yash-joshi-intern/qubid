@@ -2,8 +2,9 @@ package com.qubid.backend.services.impl;
 
 import com.qubid.backend.ExceptionHandler.PlayerNotFoundException;
 import com.qubid.backend.ExceptionHandler.TeamNotFoundException;
-import com.qubid.backend.dto.request.TeamRequestDTO;
-import com.qubid.backend.dto.response.TeamResponseDTO;
+import com.qubid.backend.dtos.Request.TeamRequestDTO;
+import com.qubid.backend.dtos.Response.PlayerResponseDTO;
+import com.qubid.backend.dtos.Response.TeamResponseDTO;
 import com.qubid.backend.entities.Player;
 import com.qubid.backend.entities.Team;
 import com.qubid.backend.repository.PlayerRepository;
@@ -114,50 +115,59 @@ public class TeamServiceImpl implements TeamService {
             throw new RuntimeException("Team has reached maximum player capacity of " + team.getMaxPlayers());
         }
 
+        player.getTeams().add(team);
         team.getPlayers().add(player);
-        teamRepository.save(team);
+
+        playerRepository.save(player);
         //optimized way -> custom query to avoid unnecessary data load
         return "Player added to team successfully";
     }
 
-    @Override
     @Transactional
     public String addListOfPlayerInTeam(Long teamId, List<Long> playerIds) {
         Team team = findTeamOrThrow(teamId);
-        List<Player> playersToAdd = playerRepository.findAllByIds(playerIds);
+        List<Player> playersToAdd = playerRepository.findAllById(playerIds);
 
         if (playersToAdd.isEmpty()) {
             throw new RuntimeException("No players found for given IDs");
         }
 
-        // Check capacity before adding
-        int afterCount = team.getPlayers().size() + playersToAdd.size();
+        List<Player> newPlayers = playersToAdd.stream()
+                .filter(p -> !team.getPlayers().contains(p))
+                .toList();
+
+        if (newPlayers.isEmpty()) {
+            return "All players are already in the team";
+        }
+
+        int afterCount = team.getPlayers().size() + newPlayers.size();
         if (afterCount > team.getMaxPlayers()) {
             throw new RuntimeException(
                     "Adding these players exceeds max capacity. " +
                             "Current: " + team.getPlayers().size() +
-                            ", Trying to add: " + playersToAdd.size() +
+                            ", Trying to add: " + newPlayers.size() +
                             ", Max allowed: " + team.getMaxPlayers()
             );
         }
 
-        // Filter out already existing players
-        playersToAdd.stream()
-                .filter(p -> !team.getPlayers().contains(p))
-                .forEach(team.getPlayers()::add);
+        newPlayers.forEach(player -> {
+            player.getTeams().add(team);
+            team.getPlayers().add(player);
+        });
 
-        teamRepository.save(team);
-        return "Players added to team successfully";
+        playerRepository.saveAll(newPlayers);
+        return "Players added to team successfully. Added: " + newPlayers.size()
+                + ", Skipped (already in team): " + (playersToAdd.size() - newPlayers.size());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Player> getListOfPlayerForTeam(Long teamId) {
+    public List<PlayerResponseDTO> getListOfPlayerForTeam(Long teamId) {
         Team team = findTeamOrThrow(teamId);
-        return team.getPlayers();
+        return team.getPlayers().stream()
+                .map(dto -> modelMapper.map(dto, PlayerResponseDTO.class))
+                .toList();
     }
-    // ^^^^^^
-    // have to map with dto --> PlayerResponseDTO
 
     @Override
     @Transactional

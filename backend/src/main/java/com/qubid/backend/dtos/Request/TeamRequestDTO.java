@@ -1,4 +1,4 @@
-package com.qubid.backend.dto.request;
+package com.qubid.backend.dtos.Request;
 
 import com.qubid.backend.entities.Contact;
 import jakarta.validation.constraints.Min;
