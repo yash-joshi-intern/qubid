@@ -47,6 +47,7 @@ public class StatServiceImpl implements StatService {
                 .battingStat(mapBattingStat(request.getBattingStat()))
                 .bowlingStat(mapBowlingStat(request.getBowlingStat()))
                 .highestLevel(request.getHighestLevel())
+                .matchesPlayed(request.getMatchesPlayed())
                 .build();
 
         Stats saved = statRepository.save(stats);

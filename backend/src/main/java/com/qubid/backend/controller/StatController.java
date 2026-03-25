@@ -14,11 +14,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/stats")
 public class StatController {
 
     private final StatService statService;
 
-    @PostMapping("/players/{playerId}/stats")
+    @PostMapping("/players/{playerId}")
     public ResponseEntity<ApiResponse<StatResponseDTO>> createStats(
             @PathVariable Long playerId,
             @Valid @RequestBody StatRequestDTO request
@@ -30,7 +31,7 @@ public class StatController {
                 .body(ApiResponse.success(data, "Stats created successfully"));
     }
 
-    @PutMapping("/stats/{statsId}")
+    @PutMapping("/{statsId}")
     public ResponseEntity<ApiResponse<StatResponseDTO>> updateStats(
             @PathVariable Long statsId,
             @Valid @RequestBody StatRequestDTO request
@@ -40,7 +41,7 @@ public class StatController {
         return ResponseEntity.status(200).body(ApiResponse.success(data, "Stats updated Successfully"));
     }
 
-    @GetMapping("/players/{playerId}/stats")
+    @GetMapping("/players/{playerId}")
     public ResponseEntity<ApiResponse<List<StatResponseDTO>>> getStatsByPlayer(
             @PathVariable Long playerId
     ) {
@@ -51,7 +52,7 @@ public class StatController {
         );
     }
 
-    @GetMapping("/players/{playerId}/stats/by-format")
+    @GetMapping("/players/by-format/{playerId}")
     public ResponseEntity<ApiResponse<StatResponseDTO>> getStatsByPlayerAndFormat(
             @PathVariable Long playerId,
             @RequestParam CricketFormat format
@@ -63,7 +64,7 @@ public class StatController {
         );
     }
 
-    @DeleteMapping("/stats/{statsId}")
+    @DeleteMapping("/{statsId}")
     public ResponseEntity<ApiResponse<StatResponseDTO>> deleteStats(@PathVariable Long statsId) {
         statService.deleteStats(statsId);
 
