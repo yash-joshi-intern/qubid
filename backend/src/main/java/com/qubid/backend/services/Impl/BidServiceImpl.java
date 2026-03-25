@@ -50,31 +50,37 @@ public class BidServiceImpl implements BidService {
     @Override
     public List<BidGroupedDTO> getAllByAuctionGrouped(Long auctionId) {
 
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new EntityNotFoundException("No auction Found"));
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new EntityNotFoundException("No auction Found"));
+
         List<AuctionPlayer> auctionPlayerList = auction.getAuctionPlayerList();
 
         return auctionPlayerList
                 .stream()
                 .map(auctionPlayer -> {
-                    BidGroupedDTO bidGroupedDTO = new BidGroupedDTO();
-                    bidGroupedDTO.setAuctionPlayerId(auctionPlayer.getId());
-                    bidGroupedDTO.setPlayerName(auctionPlayer.getPlayer().getFirstName() + " " + auctionPlayer.getPlayer().getLastName());
-                    bidGroupedDTO.setPlayerStatus(auctionPlayer.getStatus());
 
                     Bid highestBid = bidRepository
                             .findTopByAuctionPlayerIdOrderByCurrentPriceDesc(auctionPlayer.getId())
                             .orElse(null);
 
-                    bidGroupedDTO.setHighestBid(highestBid != null ? highestBid.getCurrentPrice() : null);
-                    bidGroupedDTO.setHighestBidFranchise(highestBid != null ? highestBid.getFranchise().getName() : null);
-                    bidGroupedDTO.setBids(auctionPlayer
+                    List<BidDTO> bids = auctionPlayer
                             .getBids()
                             .stream()
                             .map(this::toBidDTO)
-                            .toList()
-                    );
-                    bidGroupedDTO.setTotalBids(bidGroupedDTO.getBids().size());
-                    return bidGroupedDTO;
+                            .toList();
+
+                    return BidGroupedDTO.builder()
+                            .auctionPlayerId(auctionPlayer.getId())
+                            .playerName(
+                                    auctionPlayer.getPlayer().getFirstName() + " " +
+                                            auctionPlayer.getPlayer().getLastName()
+                            )
+                            .playerStatus(auctionPlayer.getStatus())
+                            .highestBid(highestBid != null ? highestBid.getCurrentPrice() : null)
+                            .highestBidFranchise(highestBid != null ? highestBid.getFranchise().getName() : null)
+                            .bids(bids)
+                            .totalBids(bids.size())
+                            .build();
                 })
                 .toList();
     }
@@ -123,16 +129,18 @@ public class BidServiceImpl implements BidService {
     }
 
     private BidDTO toBidDTO(Bid bid) {
-        BidDTO bidDTO = new BidDTO();
-        bidDTO.setBidAmount(bid.getCurrentPrice());
-        bidDTO.setSold(bid.isSold());
-        bidDTO.setFranchiseId(bid.getFranchise().getId());
-        bidDTO.setFranchiseName(bid.getFranchise().getName());
-        bidDTO.setPlayerName(bid.getAuctionPlayer().getPlayer().getFirstName() + " " + bid.getAuctionPlayer().getPlayer().getLastName());
-        bidDTO.setAuctionPlayerId(bid.getAuctionPlayer().getId());
-        bidDTO.setBidId(bid.getId());
-
-        return bidDTO;
+        return BidDTO.builder()
+                .bidId(bid.getId())
+                .auctionPlayerId(bid.getAuctionPlayer().getId())
+                .playerName(
+                        bid.getAuctionPlayer().getPlayer().getFirstName() + " " +
+                                bid.getAuctionPlayer().getPlayer().getLastName()
+                )
+                .franchiseId(bid.getFranchise().getId())
+                .franchiseName(bid.getFranchise().getName())
+                .bidAmount(bid.getCurrentPrice())
+                .isSold(bid.isSold())
+                .build();
     }
 
 
