@@ -3,6 +3,7 @@ package com.qubid.backend.dtos.Request;
 import com.qubid.backend.enums.CricketFormat;
 import com.qubid.backend.enums.HighestLevel;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatRequestDTO {
-    @NotNull
+
+    @NotNull(message = "Cricket format must not be null")
     private CricketFormat cricketFormat;
 
-    @NotNull
+    @NotNull(message = "Matches played must not be null")
+    @Min(value = 0, message = "Matches played cannot be negative")
     private Integer matchesPlayed;
 
     @Valid
@@ -24,6 +27,6 @@ public class StatRequestDTO {
     @Valid
     private BowlingStatDTO bowlingStat;
 
-    @NotNull
+    @NotNull(message = "Highest level must not be null")
     private HighestLevel highestLevel;
 }
