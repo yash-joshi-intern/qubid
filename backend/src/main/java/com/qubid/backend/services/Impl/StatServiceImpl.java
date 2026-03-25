@@ -1,11 +1,11 @@
 package com.qubid.backend.services.Impl;
 
-import com.qubid.backend.dtos.Request.BattingStatDTO;
-import com.qubid.backend.dtos.Request.BowlingStatDTO;
-import com.qubid.backend.dtos.Request.StatRequestDTO;
-import com.qubid.backend.dtos.Response.BattingStatResponseDTO;
-import com.qubid.backend.dtos.Response.BowlingStatResponseDTO;
-import com.qubid.backend.dtos.Response.StatResponseDTO;
+import com.qubid.backend.dtos.request.BattingStatDTO;
+import com.qubid.backend.dtos.request.BowlingStatDTO;
+import com.qubid.backend.dtos.request.StatRequestDTO;
+import com.qubid.backend.dtos.response.BattingStatResponseDTO;
+import com.qubid.backend.dtos.response.BowlingStatResponseDTO;
+import com.qubid.backend.dtos.response.StatResponseDTO;
 import com.qubid.backend.entities.BattingStat;
 import com.qubid.backend.entities.BowlingStat;
 import com.qubid.backend.entities.Player;

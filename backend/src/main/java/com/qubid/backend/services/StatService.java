@@ -1,7 +1,7 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Request.StatRequestDTO;
-import com.qubid.backend.dtos.Response.StatResponseDTO;
+import com.qubid.backend.dtos.request.StatRequestDTO;
+import com.qubid.backend.dtos.response.StatResponseDTO;
 import com.qubid.backend.enums.CricketFormat;
 
 import java.util.List;

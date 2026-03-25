@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Request;
+package com.qubid.backend.dtos.request;
 
 import com.qubid.backend.enums.CricketFormat;
 import com.qubid.backend.enums.HighestLevel;
@@ -22,7 +22,7 @@ public class StatRequestDTO {
     private Integer matchesPlayed;
 
     @Valid
-    private BattingStatDTO battingStat;
+    private com.qubid.backend.dtos.request.BattingStatDTO battingStat;
 
     @Valid
     private BowlingStatDTO bowlingStat;
