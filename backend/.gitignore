@@ -1,5 +1,5 @@
 HELP.md
-target/
+backend/target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -16,6 +16,7 @@ target/
 ### IntelliJ IDEA ###
 .idea
 *.iws
+
 *.iml
 *.ipr
 
@@ -34,3 +35,5 @@ build/
 
 ## Local env files (do not commit credentials)
 .env
+
+backend/src/main/resources/application.properties
