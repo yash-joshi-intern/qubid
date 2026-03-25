@@ -1,41 +1,43 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.entities.Franchise;
-import com.qubid.backend.entities.Player;
-import com.qubid.backend.entities.Team;
-import com.qubid.backend.entities.Tournament;
+import com.qubid.backend.dtos.request.TournamentRequestDTO;
+import com.qubid.backend.dtos.response.FranchiseResponseForTournamentDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
+import com.qubid.backend.dtos.response.TournamentResponseDTO;
 
 import java.util.List;
 
 public interface TournamentService {
 
-    public String addTournament(Tournament tournament);
+    String addTournament(TournamentRequestDTO requestDTO);
 
-    public String addListOfTournament(List<Tournament> tournamentList);
+    String addListOfTournament(List<TournamentRequestDTO> tournamentList);
 
-    public Tournament getTournament(Long tournamentId);
+    TournamentResponseDTO getTournament(Long tournamentId);
 
-    public List<Tournament> getListOfTournamentId(List<Long> tournamentIdList);
+    List<TournamentResponseDTO> getListOfTournamentId(List<Long> tournamentIdList);
 
-    public Tournament udpateTournament(Long tournamentId, Tournament tournament);
-    //use dto in most of the entity fields
+    TournamentResponseDTO updateTournament(Long tournamentId, TournamentRequestDTO requestDTO);
 
-    public String deleteTournament(Long tournamentId);
+    String deleteTournament(Long tournamentId);
 
-    public String deleteListOfTournament(List<Long> listOfTournamentId);
+    String deleteListOfTournament(List<Long> listOfTournamentId);
 
-    public List<Player> getPlayerListByTournamentId(Long tournamentId);
-    //may have to change this based on the tournament entity class
+    // Fetch related entities by tournament
+    List<PlayerResponseDTO> getPlayerListByTournamentId(Long tournamentId);
 
-    public List<Franchise> getFranchiseListByTournamentId(Long tournamentId);
+    List<FranchiseResponseForTournamentDTO> getFranchiseListByTournamentId(Long tournamentId);  // was List<Franchise>
 
-    public List<Team> getTeamListByTournamentId(Long tournamentId);
+    List<TeamResponseDTO> getTeamListByTournamentId(Long tournamentId);            // was List<Team>
 
-    public String addListOfTeamInTournament(List<Team> teamList,Long tournamentId);
-    //here dto for specific response can be created
-    public String udpateListOfTeamInTournament(List<Team> teamList, Long tournamentId);
+    // Team ↔ Tournament operations
+    // List<Long> instead of List<Team> — cleaner, consistent with other services
+    String addListOfTeamInTournament(Long tournamentId, List<Long> teamIds);
 
-    public String deleteTournamentTeamList(Long tournamentId);
+    String updateListOfTeamInTournament(Long tournamentId, List<Long> teamIds);
+
+    String deleteTournamentTeamList(Long tournamentId);
     //will delte from the middle table
 
     //franchies pending

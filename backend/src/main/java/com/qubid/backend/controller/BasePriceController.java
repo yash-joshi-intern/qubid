@@ -1,8 +1,8 @@
 package com.qubid.backend.controller;
 
 import com.qubid.backend.Response.ApiResponse;
-import com.qubid.backend.dtos.Request.BasePriceRequestDTO;
-import com.qubid.backend.dtos.Response.BasePriceResponseDTO;
+import com.qubid.backend.dtos.request.BasePriceRequestDTO;
+import com.qubid.backend.dtos.response.BasePriceResponseDTO;
 import com.qubid.backend.services.BasePriceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

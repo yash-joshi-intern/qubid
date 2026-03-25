@@ -27,7 +27,7 @@ public class Player extends BaseEntity {
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private List<Stats> stats;
-  
+
     @Embedded
     private Contact contactDetails;
 
@@ -52,6 +52,6 @@ public class Player extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "tournament_id"))
     private List<Tournament> tournaments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AuctionPlayer> auctionPlayers = new ArrayList<>();
 }

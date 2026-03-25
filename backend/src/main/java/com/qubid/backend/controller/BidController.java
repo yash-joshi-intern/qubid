@@ -1,8 +1,8 @@
 package com.qubid.backend.controller;
 
 import com.qubid.backend.Response.ApiResponse;
-import com.qubid.backend.dtos.Response.BidDTO;
-import com.qubid.backend.dtos.Response.BidGroupedDTO;
+import com.qubid.backend.dtos.response.BidDTO;
+import com.qubid.backend.dtos.response.BidGroupedDTO;
 import com.qubid.backend.services.BidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

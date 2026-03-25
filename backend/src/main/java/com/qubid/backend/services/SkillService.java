@@ -1,9 +1,9 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Request.SkillRequestDto;
-import com.qubid.backend.dtos.Response.SkillDto;
-import com.qubid.backend.dtos.Response.SkillPlayerDTO;
-import com.qubid.backend.dtos.Response.SkillResponseDto;
+import com.qubid.backend.dtos.request.SkillRequestDTO;
+import com.qubid.backend.dtos.response.SkillDTO;
+import com.qubid.backend.dtos.response.SkillPlayerDTO;
+import com.qubid.backend.dtos.response.SkillResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,16 +11,16 @@ import java.util.Optional;
 public interface SkillService {
 
     // Create a new skill
-    SkillResponseDto createSkill(SkillRequestDto skillRequestDto);
+    SkillResponseDTO createSkill(SkillRequestDTO skillRequestDto);
 
     // Fetch all skills (basic)
-    List<SkillDto> getAllSkills();
+    List<SkillDTO> getAllSkills();
 
     // Fetch skill by id (basic)
-    SkillDto getSkillById(Long id);
+    SkillDTO getSkillById(Long id);
 
     // Update skill by id
-    SkillResponseDto updateSkill(Long id, SkillRequestDto skillRequestDto);
+    SkillResponseDTO updateSkill(Long id, SkillRequestDTO skillRequestDto);
 
     // Delete skill by id
     void deleteSkill(Long id);
@@ -31,22 +31,22 @@ public interface SkillService {
     // --- Optional / Extended Operations ---
 
     // Fetch skill by exact name
-    default Optional<SkillDto> getSkillByName(String name) {
+    default Optional<SkillDTO> getSkillByName(String name) {
         return Optional.empty();
     }
 
     // Search skills by partial name
-    default List<SkillDto> searchSkillsByName(String namePart) {
+    default List<SkillDTO> searchSkillsByName(String namePart) {
         return List.of();
     }
 
     // Fetch skills by expertise level
-    default List<SkillDto> getSkillsByExpertiseLevel(String expertiseLevel) {
+    default List<SkillDTO> getSkillsByExpertiseLevel(String expertiseLevel) {
         return List.of();
     }
 
     // Fetch by maximum rating
-    default List<SkillDto> getSkillByMaximumRating(Integer ratings) {
+    default List<SkillDTO> getSkillByMaximumRating(Integer ratings) {
         return List.of();
     }
 

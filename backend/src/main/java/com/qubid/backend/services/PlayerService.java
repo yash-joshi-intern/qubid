@@ -1,41 +1,38 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.entities.*;
+import com.qubid.backend.dtos.request.PlayerRequestDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.SkillResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
+import com.qubid.backend.dtos.response.TournamentResponseDTO;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface PlayerService {
 
-    public String addPlayer(Player player);
+    String addPlayer(PlayerRequestDTO playerRequestDTO);
 
-    public String addListOfPlayer(List<Player> playerList);
+    String addListOfPlayer(List<PlayerRequestDTO> playerDTOList);
 
-    public Player updatePlayer(Long playerID, Player player);
+    PlayerResponseDTO updatePlayer(Long playerID, PlayerRequestDTO playerRequestDTO);
 
-    public Player getPlayerById(Long playerID);
+    PlayerResponseDTO getPlayerById(Long playerID);
 
-    public List<Player> getListOfPlayer(List<Long> playerIdList);
+    List<PlayerResponseDTO> getListOfPlayer(List<Long> playerIdList);
 
-    public String deletePlayer(Long playerID);
+    String deletePlayer(Long playerID);
 
-    public String deleteListOfPlayer(List<Long> playerID);
+    String deleteListOfPlayer(List<Long> playerIDs);
 
-    public Stats getPlayerState(Long playerIdD);
+    //remaining --> Check from here
 
-    public Stats updatePlayerStats(Long playerId, Stats stats);
+    List<SkillResponseDTO> getListOfSkillsForPlayerID(Long playerID);
 
-    public List<BasePrice> getBasePriceForPlayerId(Long playerID);
-    //can be add multiple service for the baseprice but it will be inside the baseprice service
-    // add, update, delete based on PlayerID
+    List<TeamResponseDTO> getListOfTeamForPlayerID(Long playerID);
 
-    public List<Skill> getListOfSkillsForPlayerID(Long playerID);
-    //here also Skills realted services can be mentioned, but it will be inside the specific skill service where the id of player will
-    // be given and after the various operations can be done.
-    // add, update, delete based on PlayerID
+    List<TournamentResponseDTO> getListOfTournamentForPlayerID(Long playerID);
 
-    public List<Team> getLisOfTeamForPlayerID(Long playerID);
-    // same as above
-
-    public List<Tournament> getListOfTournamentForPlayerID(Long playerID);
+    String addLivePlayerInTournament(Long playerId, Long tournamentId, BigInteger basePrice);
 
 }

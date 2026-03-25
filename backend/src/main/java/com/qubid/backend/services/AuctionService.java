@@ -1,8 +1,8 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Request.AuctionRequestDTO;
-import com.qubid.backend.dtos.Request.PlaceBidRequestDTO;
-import com.qubid.backend.dtos.Response.AuctionDTO;
+import com.qubid.backend.dtos.request.AuctionRequestDTO;
+import com.qubid.backend.dtos.request.PlaceBidRequestDTO;
+import com.qubid.backend.dtos.response.AuctionDTO;
 
 import java.util.List;
 
