@@ -1,13 +1,15 @@
 package com.qubid.backend.dtos.Response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class SkillResponseDTO {
+public class SkillDto {
     private Long id;
     private String name;
     private Integer rating;

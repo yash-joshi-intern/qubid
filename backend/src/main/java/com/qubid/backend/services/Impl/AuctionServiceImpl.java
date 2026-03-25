@@ -55,15 +55,6 @@ public class AuctionServiceImpl implements AuctionService {
 
         List<Franchise> franchises = tournament.getFranchises();
         franchises.forEach(franchise -> {
-//            Team team1 = franchise
-//                    .getTeams()
-//                    .stream()
-//                    .filter((team) -> team.getTournament().getId() == tournament.getId())
-//                    .findFirst()
-//                    .orElseThrow(() -> {
-//                        throw new EntityNotFoundException("Team Not Found");
-//                    });
-//            ;
             Team team1 = teamRepository
                     .findByFranchiseIdAndTournamentId(franchise.getId(), tournament.getId())
                     .orElseThrow(() -> new EntityNotFoundException("Team Not Found"));
@@ -103,15 +94,15 @@ public class AuctionServiceImpl implements AuctionService {
 
         auctionPlayer.setStatus(AuctionPlayerStatus.LIVE);
 
-        PlayerLiveEventDTO playerLiveEventDTO = new PlayerLiveEventDTO(
-                auctionPlayerId,
-                auctionPlayer.getPlayer().getId(),
-                auctionPlayer.getPlayer().getFirstName(),
-                auctionPlayer.getPlayer().getLastName(),
-                auctionPlayer.getPlayer().getCountry(),
-                auctionPlayer.getBasePrice().getBasePrice(),
-                auctionPlayer.getStatus()
-        );
+        PlayerLiveEventDTO playerLiveEventDTO = PlayerLiveEventDTO.builder()
+                .auctionPlayerId(auctionPlayerId)
+                .playerId(auctionPlayer.getPlayer().getId())
+                .firstName(auctionPlayer.getPlayer().getFirstName())
+                .lastName(auctionPlayer.getPlayer().getLastName())
+                .country(auctionPlayer.getPlayer().getCountry())
+                .basePrice(auctionPlayer.getBasePrice().getBasePrice())
+                .status(auctionPlayer.getStatus())
+                .build();
 
         broker.convertAndSend("/topic/auction/" + auctionId + "/player-live", playerLiveEventDTO);
     }
@@ -162,13 +153,13 @@ public class AuctionServiceImpl implements AuctionService {
 
         // broadcast part
 
-        NewBidEventDTO bidEventDTO = new NewBidEventDTO(
-                savedBid.getId(),
-                auctionPlayer.getId(),
-                franchise.getId(),
-                franchise.getName(),
-                request.getBidAmount()
-        );
+        NewBidEventDTO bidEventDTO = NewBidEventDTO.builder()
+                .bidId(savedBid.getId())
+                .auctionPlayerId(auctionPlayer.getId())
+                .franchiseId(franchise.getId())
+                .franchiseName(franchise.getName())
+                .currentHighest(request.getBidAmount())
+                .build();
 
         broker.convertAndSend("/topic/auction/" + auctionId + "/new-bid", bidEventDTO);
     }
@@ -213,16 +204,16 @@ public class AuctionServiceImpl implements AuctionService {
 
         //broadcast part
 
-        PlayerSoldEventDTO playerSoldEventDTO = new PlayerSoldEventDTO(
-                auctionPlayerId,
-                player.getId(),
-                player.getFirstName() + " " + player.getLastName(),
-                franchise.getId(),
-                franchise.getName(),
-                highestBid.getCurrentPrice(),
-                team.getRemainingPurse(),
-                auctionPlayer.getStatus()
-        );
+        PlayerSoldEventDTO playerSoldEventDTO = PlayerSoldEventDTO.builder()
+                .auctionPlayerId(auctionPlayerId)
+                .playerId(player.getId())
+                .playerName(player.getFirstName() + " " + player.getLastName())
+                .soldToFranchiseId(franchise.getId())
+                .soldToFranchiseName(franchise.getName())
+                .finalPrice(highestBid.getCurrentPrice())
+                .franchiseRemainingPurse(team.getRemainingPurse())
+                .status(auctionPlayer.getStatus())
+                .build();
 
         broker.convertAndSend("/topic/auction/" + auctionId + "/sold", playerSoldEventDTO);
 
@@ -244,12 +235,15 @@ public class AuctionServiceImpl implements AuctionService {
         auctionPlayerRepository.save(auctionPlayer);
 
         // Broadcast
-        PlayerUnsoldEventDTO playerUnsoldEventDTO = new PlayerUnsoldEventDTO(
-                auctionPlayerId,
-                auctionPlayer.getPlayer().getId(),
-                auctionPlayer.getPlayer().getFirstName() + " " + auctionPlayer.getPlayer().getLastName(),
-                auctionPlayer.getStatus()
-        );
+        PlayerUnsoldEventDTO playerUnsoldEventDTO = PlayerUnsoldEventDTO.builder()
+                .auctionPlayerId(auctionPlayerId)
+                .playerId(auctionPlayer.getPlayer().getId())
+                .playerName(
+                        auctionPlayer.getPlayer().getFirstName() + " " +
+                                auctionPlayer.getPlayer().getLastName()
+                )
+                .status(auctionPlayer.getStatus())
+                .build();
 
 
         broker.convertAndSend("/topic/auction/" + auctionId + "/unsold", playerUnsoldEventDTO);
@@ -328,40 +322,39 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     private AuctionPlayerDTO toAuctionPlayerDto(AuctionPlayer auctionPlayer) {
-        AuctionPlayerDTO dto = new AuctionPlayerDTO();
 
-        // AuctionPlayer basic fields
-        dto.setAuctionPlayerId(auctionPlayer.getId());
-        dto.setStatus(auctionPlayer.getStatus());
-        dto.setFinalSoldPrice(auctionPlayer.getFinalSoldPrice());
+        return AuctionPlayerDTO.builder()
+                // AuctionPlayer basic fields
+                .auctionPlayerId(auctionPlayer.getId())
+                .status(auctionPlayer.getStatus())
+                .finalSoldPrice(auctionPlayer.getFinalSoldPrice())
 
-        // Player details
-        if (auctionPlayer.getPlayer() != null) {
-            dto.setPlayerId(auctionPlayer.getPlayer().getId());
-            dto.setFirstName(auctionPlayer.getPlayer().getFirstName());
-            dto.setLastName(auctionPlayer.getPlayer().getLastName());
-            dto.setCountry(auctionPlayer.getPlayer().getCountry());
-        }
+                // Player details
+                .playerId(auctionPlayer.getPlayer() != null ? auctionPlayer.getPlayer().getId() : null)
+                .firstName(auctionPlayer.getPlayer() != null ? auctionPlayer.getPlayer().getFirstName() : null)
+                .lastName(auctionPlayer.getPlayer() != null ? auctionPlayer.getPlayer().getLastName() : null)
+                .country(auctionPlayer.getPlayer() != null ? auctionPlayer.getPlayer().getCountry() : null)
 
-        // Base Price
-        if (auctionPlayer.getBasePrice() != null) {
-            dto.setBasePrice(auctionPlayer.getBasePrice().getBasePrice());
-        }
+                // Base Price
+                .basePrice(auctionPlayer.getBasePrice() != null ? auctionPlayer.getBasePrice().getBasePrice() : null)
 
-        // Auction details
-        if (auctionPlayer.getAuction() != null) {
-            dto.setAuctionId(auctionPlayer.getAuction().getId());
-            dto.setAuctionTitle(auctionPlayer.getAuction().getTitle());
-        }
+                // Auction details
+                .auctionId(auctionPlayer.getAuction() != null ? auctionPlayer.getAuction().getId() : null)
+                .auctionTitle(auctionPlayer.getAuction() != null ? auctionPlayer.getAuction().getTitle() : null)
 
-        // Sold Franchise details
-        if (auctionPlayer.getSoldToFranchise() != null) {
-            dto.setSoldToFranchiseId(auctionPlayer.getSoldToFranchise().getId());
-            dto.setSoldToFranchiseName(auctionPlayer.getSoldToFranchise().getName());
-        }
+                // Sold Franchise details
+                .soldToFranchiseId(
+                        auctionPlayer.getSoldToFranchise() != null
+                                ? auctionPlayer.getSoldToFranchise().getId()
+                                : null
+                )
+                .soldToFranchiseName(
+                        auctionPlayer.getSoldToFranchise() != null
+                                ? auctionPlayer.getSoldToFranchise().getName()
+                                : null
+                )
 
-        return dto;
-
+                .build();
     }
 
 }

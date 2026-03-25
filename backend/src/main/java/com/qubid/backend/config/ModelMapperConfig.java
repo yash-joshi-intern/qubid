@@ -17,8 +17,4 @@ public class ModelMapperConfig {
         return modelMapper;
 //        return new ModelMapper(); -- Dhruv
     }
-
-//    STRICT → exact, safe, predictable
-//    STANDARD → flexible, default --> Token base comparison
-//    LOOSE → guessy, risky --> try to hard match names
 }
