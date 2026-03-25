@@ -1,9 +1,9 @@
 package com.qubid.backend.controller;
 
 import com.qubid.backend.Response.ApiResponse;
-import com.qubid.backend.dtos.Request.AuctionRequestDTO;
-import com.qubid.backend.dtos.Request.PlaceBidRequestDTO;
-import com.qubid.backend.dtos.Response.AuctionDTO;
+import com.qubid.backend.dtos.request.AuctionRequestDTO;
+import com.qubid.backend.dtos.request.PlaceBidRequestDTO;
+import com.qubid.backend.dtos.response.AuctionDTO;
 import com.qubid.backend.services.AuctionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/auction")
 @RequiredArgsConstructor
 public class AuctionController {
+    
     private final AuctionService auctionService;
 
     @PostMapping("/create")

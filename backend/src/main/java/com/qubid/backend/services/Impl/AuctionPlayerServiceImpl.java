@@ -1,7 +1,7 @@
-package com.qubid.backend.services.Impl;
+package com.qubid.backend.services.impl;
 
-import com.qubid.backend.dtos.Request.AuctionPlayerRequestDTO;
-import com.qubid.backend.dtos.Response.AuctionPlayerDTO;
+import com.qubid.backend.dtos.request.AuctionPlayerRequestDTO;
+import com.qubid.backend.dtos.response.AuctionPlayerDTO;
 import com.qubid.backend.entities.Auction;
 import com.qubid.backend.entities.AuctionPlayer;
 import com.qubid.backend.entities.BasePrice;

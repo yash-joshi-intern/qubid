@@ -1,7 +1,7 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Response.BidDTO;
-import com.qubid.backend.dtos.Response.BidGroupedDTO;
+import com.qubid.backend.dtos.response.BidDTO;
+import com.qubid.backend.dtos.response.BidGroupedDTO;
 
 import java.util.List;
 

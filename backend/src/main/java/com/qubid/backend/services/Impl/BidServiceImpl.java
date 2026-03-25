@@ -1,7 +1,7 @@
 package com.qubid.backend.services.Impl;
 
-import com.qubid.backend.dtos.Response.BidDTO;
-import com.qubid.backend.dtos.Response.BidGroupedDTO;
+import com.qubid.backend.dtos.response.BidDTO;
+import com.qubid.backend.dtos.response.BidGroupedDTO;
 import com.qubid.backend.entities.Auction;
 import com.qubid.backend.entities.AuctionPlayer;
 import com.qubid.backend.entities.Bid;

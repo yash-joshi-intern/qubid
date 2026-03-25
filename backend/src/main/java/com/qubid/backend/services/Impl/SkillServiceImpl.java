@@ -1,10 +1,10 @@
 package com.qubid.backend.services.Impl;
 
-import com.qubid.backend.dtos.Request.SkillRequestDto;
-import com.qubid.backend.dtos.Response.SkillDto;
-import com.qubid.backend.dtos.Response.SkillPlayerDTO;
-import com.qubid.backend.dtos.Response.SkillPlayerRowDTO;
-import com.qubid.backend.dtos.Response.SkillResponseDto;
+import com.qubid.backend.dtos.request.SkillRequestDTO;
+import com.qubid.backend.dtos.response.SkillDTO;
+import com.qubid.backend.dtos.response.SkillPlayerDTO;
+import com.qubid.backend.dtos.response.SkillPlayerRowDTO;
+import com.qubid.backend.dtos.response.SkillResponseDTO;
 import com.qubid.backend.entities.Player;
 import com.qubid.backend.entities.Skill;
 import com.qubid.backend.repository.SkillRepository;
@@ -30,7 +30,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional
-    public SkillResponseDto createSkill(SkillRequestDto dto) {
+    public SkillResponseDTO createSkill(SkillRequestDTO dto) {
 
         if (skillRepository.existsByNameIgnoreCase(dto.getName())) {
             throw new IllegalArgumentException("Skill already exists with name: " + dto.getName());
@@ -45,19 +45,19 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SkillDto> getAllSkills() {
-        return skillRepository.findAll().stream().map(skill -> modelMapper.map(skill, SkillDto.class)).toList();
+    public List<SkillDTO> getAllSkills() {
+        return skillRepository.findAll().stream().map(skill -> modelMapper.map(skill, SkillDTO.class)).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public SkillDto getSkillById(Long id) {
-        return modelMapper.map(getSkillOrThrow(id), SkillDto.class);
+    public SkillDTO getSkillById(Long id) {
+        return modelMapper.map(getSkillOrThrow(id), SkillDTO.class);
     }
 
     @Override
     @Transactional
-    public SkillResponseDto updateSkill(Long id, SkillRequestDto dto) {
+    public SkillResponseDTO updateSkill(Long id, SkillRequestDTO dto) {
 
         Skill existingSkill = getSkillOrThrow(id);
 
@@ -93,26 +93,26 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<SkillDto> getSkillByName(String name) {
-        return skillRepository.findByNameIgnoreCase(name).map(skill -> modelMapper.map(skill, SkillDto.class));
+    public Optional<SkillDTO> getSkillByName(String name) {
+        return skillRepository.findByNameIgnoreCase(name).map(skill -> modelMapper.map(skill, SkillDTO.class));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SkillDto> searchSkillsByName(String namePart) {
-        return skillRepository.findByNameContainingIgnoreCase(namePart).stream().map(skill -> modelMapper.map(skill, SkillDto.class)).toList();
+    public List<SkillDTO> searchSkillsByName(String namePart) {
+        return skillRepository.findByNameContainingIgnoreCase(namePart).stream().map(skill -> modelMapper.map(skill, SkillDTO.class)).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SkillDto> getSkillsByExpertiseLevel(String expertiseLevel) {
-        return skillRepository.findAllByExpertiseLevelIgnoreCase(expertiseLevel).stream().map(skill -> modelMapper.map(skill, SkillDto.class)).toList();
+    public List<SkillDTO> getSkillsByExpertiseLevel(String expertiseLevel) {
+        return skillRepository.findAllByExpertiseLevelIgnoreCase(expertiseLevel).stream().map(skill -> modelMapper.map(skill, SkillDTO.class)).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SkillDto> getSkillByMaximumRating(Integer ratings) {
-        return skillRepository.findAllByRatingLessThanEqual(ratings).stream().map(skill -> modelMapper.map(skill, SkillDto.class)).toList();
+    public List<SkillDTO> getSkillByMaximumRating(Integer ratings) {
+        return skillRepository.findAllByRatingLessThanEqual(ratings).stream().map(skill -> modelMapper.map(skill, SkillDTO.class)).toList();
     }
 
     private Skill getSkillOrThrow(Long id) {
@@ -121,8 +121,8 @@ public class SkillServiceImpl implements SkillService {
     }
 
     // Custom mapping (important)
-    private SkillResponseDto convertToResponseDto(Skill skill) {
-        SkillResponseDto dto = modelMapper.map(skill, SkillResponseDto.class);
+    private SkillResponseDTO convertToResponseDto(Skill skill) {
+        SkillResponseDTO dto = modelMapper.map(skill, SkillResponseDTO.class);
 
         // manual field (not auto-mapped)
         dto.setPlayersCount(skill.getPlayers() == null ? 0 : skill.getPlayers().size());
