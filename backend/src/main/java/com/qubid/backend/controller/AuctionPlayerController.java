@@ -1,8 +1,8 @@
 package com.qubid.backend.controller;
 
 import com.qubid.backend.Response.ApiResponse;
-import com.qubid.backend.dtos.Request.AuctionPlayerRequestDTO;
-import com.qubid.backend.dtos.Response.AuctionPlayerDTO;
+import com.qubid.backend.dtos.request.AuctionPlayerRequestDTO;
+import com.qubid.backend.dtos.response.AuctionPlayerDTO;
 import com.qubid.backend.enums.AuctionPlayerStatus;
 import com.qubid.backend.services.AuctionPlayerService;
 import jakarta.validation.Valid;

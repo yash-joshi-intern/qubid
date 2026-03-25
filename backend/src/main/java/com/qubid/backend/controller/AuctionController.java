@@ -1,11 +1,12 @@
 package com.qubid.backend.controller;
 
 import com.qubid.backend.Response.ApiResponse;
-import com.qubid.backend.dtos.Request.AuctionRequestDTO;
-import com.qubid.backend.dtos.Request.PlaceBidRequestDTO;
-import com.qubid.backend.dtos.Response.AuctionDTO;
+import com.qubid.backend.dtos.request.AuctionRequestDTO;
+import com.qubid.backend.dtos.request.PlaceBidRequestDTO;
+import com.qubid.backend.dtos.response.AuctionDTO;
 import com.qubid.backend.services.AuctionService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auction")
-
+@RequiredArgsConstructor
 public class AuctionController {
-    public AuctionController(AuctionService auctionService) {
-        this.auctionService = auctionService;
-    }
     
     private final AuctionService auctionService;
 

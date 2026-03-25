@@ -1,11 +1,11 @@
 package com.qubid.backend.controller;
 
 import com.qubid.backend.Response.ApiResponse;
-import com.qubid.backend.dtos.Request.TournamentRequestDTO;
-import com.qubid.backend.dtos.Response.FranchiseResponseForTournamentDTO;
-import com.qubid.backend.dtos.Response.PlayerResponseDTO;
-import com.qubid.backend.dtos.Response.TeamResponseDTO;
-import com.qubid.backend.dtos.Response.TournamentResponseDTO;
+import com.qubid.backend.dtos.request.TournamentRequestDTO;
+import com.qubid.backend.dtos.response.FranchiseResponseForTournamentDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
+import com.qubid.backend.dtos.response.TournamentResponseDTO;
 import com.qubid.backend.services.TournamentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

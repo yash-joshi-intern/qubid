@@ -1,7 +1,7 @@
 package com.qubid.backend.services.Impl;
 
-import com.qubid.backend.dtos.Request.BasePriceRequestDTO;
-import com.qubid.backend.dtos.Response.BasePriceResponseDTO;
+import com.qubid.backend.dtos.request.BasePriceRequestDTO;
+import com.qubid.backend.dtos.response.BasePriceResponseDTO;
 import com.qubid.backend.entities.BasePrice;
 import com.qubid.backend.entities.Player;
 import com.qubid.backend.entities.Tournament;

@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Response;
+package com.qubid.backend.dtos.response;
 
 import com.qubid.backend.enums.AuctionStatus;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.qubid.backend.repository;
 
-import com.qubid.backend.dtos.Response.SkillPlayerRowDTO;
+import com.qubid.backend.dtos.response.SkillPlayerRowDTO;
 import com.qubid.backend.entities.Skill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,7 +24,7 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     List<Skill> findByNameContainingIgnoreCase(String namePart);
 
     @Query("""
-                select new com.qubid.backend.dtos.Response.SkillPlayerRowDTO(
+                select new com.qubid.backend.dtos.response.SkillPlayerRowDTO(
                     s.id,
                     p
                 ) 

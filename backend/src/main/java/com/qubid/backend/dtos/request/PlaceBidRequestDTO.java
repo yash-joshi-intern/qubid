@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Request;
+package com.qubid.backend.dtos.request;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

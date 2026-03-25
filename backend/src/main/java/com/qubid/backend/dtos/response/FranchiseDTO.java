@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Response;
+package com.qubid.backend.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FranchiseDto {
+public class FranchiseDTO {
     private Long id;
     private String name;
     private String city;
     private String country;
-    private ContactDto contact;
+    private ContactDTO contact;
 }

@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Request;
+package com.qubid.backend.dtos.request;
 
 import com.qubid.backend.enums.AuctionStatus;
 import jakarta.validation.constraints.*;

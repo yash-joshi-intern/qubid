@@ -2,11 +2,11 @@ package com.qubid.backend.services.impl;
 
 import com.qubid.backend.ExceptionHandler.TeamNotFoundException;
 import com.qubid.backend.ExceptionHandler.TournamentNotFoundException;
-import com.qubid.backend.dtos.Request.TournamentRequestDTO;
-import com.qubid.backend.dtos.Response.FranchiseResponseForTournamentDTO;
-import com.qubid.backend.dtos.Response.PlayerResponseDTO;
-import com.qubid.backend.dtos.Response.TeamResponseDTO;
-import com.qubid.backend.dtos.Response.TournamentResponseDTO;
+import com.qubid.backend.dtos.request.TournamentRequestDTO;
+import com.qubid.backend.dtos.response.FranchiseResponseForTournamentDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
+import com.qubid.backend.dtos.response.TournamentResponseDTO;
 import com.qubid.backend.entities.Team;
 import com.qubid.backend.entities.Tournament;
 import com.qubid.backend.repository.TeamRepository;
@@ -62,7 +62,7 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     @Transactional(readOnly = true)
     public List<TournamentResponseDTO> getListOfTournamentId(List<Long> tournamentIdList) {
-        List<Tournament> tournaments = tournamentRepository.findAllByIds(tournamentIdList);
+        List<Tournament> tournaments = tournamentRepository.findAllById(tournamentIdList);
         if (tournaments.isEmpty()) {
             throw new RuntimeException("No tournaments found for given IDs");
         }
@@ -92,17 +92,42 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional
     public String deleteTournament(Long tournamentId) {
         Tournament tournament = findTournamentOrThrow(tournamentId);
+
+        tournament.getFranchises().forEach(f -> f.getTournaments().remove(tournament));
+        tournament.getFranchises().clear();
+
+        tournament.getPlayers().forEach(p -> p.getTournaments().remove(tournament));
+        tournament.getPlayers().clear();
+
+        tournament.getTeams().forEach(team -> team.setTournament(null));
+        teamRepository.saveAll(tournament.getTeams());
+        tournament.getTeams().clear();
+
         tournamentRepository.delete(tournament);
+
         return "Tournament deleted successfully";
     }
 
     @Override
     @Transactional
     public String deleteListOfTournament(List<Long> listOfTournamentId) {
-        List<Tournament> tournaments = tournamentRepository.findAllByIds(listOfTournamentId);
+        List<Tournament> tournaments = tournamentRepository.findAllById(listOfTournamentId);
 
         if (tournaments.isEmpty()) {
             throw new RuntimeException("No tournaments found for given IDs");
+        }
+
+        for (Tournament tournament : tournaments) {
+
+            tournament.getFranchises().forEach(f -> f.getTournaments().remove(tournament));
+            tournament.getFranchises().clear();
+
+            tournament.getPlayers().forEach(p -> p.getTournaments().remove(tournament));
+            tournament.getPlayers().clear();
+
+            tournament.getTeams().forEach(team -> team.setTournament(null));
+            teamRepository.saveAll(tournament.getTeams());
+            tournament.getTeams().clear();
         }
 
         tournamentRepository.deleteAll(tournaments);
@@ -197,13 +222,14 @@ public class TournamentServiceImpl implements TournamentService {
     public String deleteTournamentTeamList(Long tournamentId) {
         Tournament tournament = findTournamentOrThrow(tournamentId);
 
-        if (tournament.getTeams().isEmpty()) {
+        List<Team> teams = tournament.getTeams();
+        if (teams.isEmpty()) {
             throw new RuntimeException("No teams linked to tournament " + tournamentId);
         }
 
-        // Only clears the junction table — team entities stay intact
-        tournament.getTeams().clear();
-        tournamentRepository.save(tournament);
+        teams.forEach(team -> team.setTournament(null));
+        teamRepository.saveAll(teams);
+
         return "All teams unlinked from tournament successfully";
     }
 
@@ -213,7 +239,7 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     private List<Team> fetchTeamsOrThrow(List<Long> teamIds) {
-        List<Team> teams = teamRepository.findAllByIds(teamIds);
+        List<Team> teams = teamRepository.findAllById(teamIds);
         if (teams.isEmpty()) {
             throw new TeamNotFoundException(teamIds.get(0)); // first missing ID
         }

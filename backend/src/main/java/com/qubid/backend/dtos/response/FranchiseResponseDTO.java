@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Response;
+package com.qubid.backend.dtos.response;
 
 import com.qubid.backend.entities.Team;
 import com.qubid.backend.entities.Tournament;
@@ -13,12 +13,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FranchiseResponseDto {
+public class FranchiseResponseDTO {
     private Long id;
     private String name;
     private String city;
     private String country;
-    private ContactDto contact;
+    private ContactDTO contact;
 
     // TODO: Replace Team entity exposure with TeamResponseDto once Team module owner delivers DTO.
     private List<Team> teams;

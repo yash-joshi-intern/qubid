@@ -1,10 +1,10 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Request.PlayerRequestDTO;
-import com.qubid.backend.dtos.Response.PlayerResponseDTO;
-import com.qubid.backend.dtos.Response.SkillResponseDTO;
-import com.qubid.backend.dtos.Response.TeamResponseDTO;
-import com.qubid.backend.dtos.Response.TournamentResponseDTO;
+import com.qubid.backend.dtos.request.PlayerRequestDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.SkillResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
+import com.qubid.backend.dtos.response.TournamentResponseDTO;
 
 import java.math.BigInteger;
 import java.util.List;

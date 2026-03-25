@@ -1,10 +1,10 @@
 package com.qubid.backend.services.Impl;
 
-import com.qubid.backend.dtos.Request.FranchiseRequestDto;
-import com.qubid.backend.dtos.Response.FranchiseDto;
-import com.qubid.backend.dtos.Response.FranchiseResponseDto;
-import com.qubid.backend.dtos.Response.FranchiseTeamRowDto;
-import com.qubid.backend.dtos.Response.FranchiseTournamentRowDto;
+import com.qubid.backend.dtos.request.FranchiseRequestDTO;
+import com.qubid.backend.dtos.response.FranchiseDTO;
+import com.qubid.backend.dtos.response.FranchiseResponseDTO;
+import com.qubid.backend.dtos.response.FranchiseTeamRowDTO;
+import com.qubid.backend.dtos.response.FranchiseTournamentRowDTO;
 import com.qubid.backend.entities.Franchise;
 import com.qubid.backend.entities.Team;
 import com.qubid.backend.entities.Tournament;
@@ -29,7 +29,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 
     @Transactional
     @Override
-    public FranchiseResponseDto createFranchise(FranchiseRequestDto dto) {
+    public FranchiseResponseDTO createFranchise(FranchiseRequestDTO dto) {
 
         if (franchiseRepository.existsFranchiseByName(dto.getName())) {
             throw new IllegalArgumentException("Franchise already exists with this name");
@@ -39,27 +39,27 @@ public class FranchiseServiceImpl implements FranchiseService {
 
         Franchise saved = franchiseRepository.save(franchise);
 
-        return modelMapper.map(saved, FranchiseResponseDto.class);
+        return modelMapper.map(saved, FranchiseResponseDTO.class);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FranchiseDto> getAllFranchises() {
+    public List<FranchiseDTO> getAllFranchises() {
         return franchiseRepository.findAll()
                 .stream()
-                .map(f -> modelMapper.map(f, FranchiseDto.class))
+                .map(f -> modelMapper.map(f, FranchiseDTO.class))
                 .toList();
     }
 
     @Override
     @Transactional
-    public FranchiseDto getFranchiseById(Long id) {
-        return modelMapper.map(getFranchiseOrThrow(id), FranchiseDto.class);
+    public FranchiseDTO getFranchiseById(Long id) {
+        return modelMapper.map(getFranchiseOrThrow(id), FranchiseDTO.class);
     }
 
     @Override
     @Transactional
-    public FranchiseResponseDto updateFranchise(Long id, FranchiseRequestDto dto) {
+    public FranchiseResponseDTO updateFranchise(Long id, FranchiseRequestDTO dto) {
 
         Franchise existing = getFranchiseOrThrow(id);
 
@@ -67,7 +67,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 
         Franchise updated = franchiseRepository.save(existing);
 
-        return modelMapper.map(updated, FranchiseResponseDto.class);
+        return modelMapper.map(updated, FranchiseResponseDTO.class);
     }
 
     @Override
@@ -79,51 +79,51 @@ public class FranchiseServiceImpl implements FranchiseService {
 
     @Override
     @Transactional
-    public Optional<FranchiseDto> getFranchiseByName(String name) {
+    public Optional<FranchiseDTO> getFranchiseByName(String name) {
         return Optional.of(franchiseRepository.findByNameIgnoreCase(name)
-                .map(f -> modelMapper.map(f, FranchiseDto.class))
+                .map(f -> modelMapper.map(f, FranchiseDTO.class))
                 .orElseThrow(() -> new EntityNotFoundException("Franchise not found with name: " + name)));
     }
 
     @Override
     @Transactional
-    public List<FranchiseDto> getFranchisesByCountry(String country) {
+    public List<FranchiseDTO> getFranchisesByCountry(String country) {
         return franchiseRepository.findAllByCountryIgnoreCase(country)
                 .stream()
-                .map(f -> modelMapper.map(f, FranchiseDto.class))
+                .map(f -> modelMapper.map(f, FranchiseDTO.class))
                 .toList();
     }
 
     @Override
     @Transactional
-    public List<FranchiseDto> searchFranchisesByName(String namePart) {
+    public List<FranchiseDTO> searchFranchisesByName(String namePart) {
         return franchiseRepository.findByNameContainingIgnoreCase(namePart)
                 .stream()
-                .map(f -> modelMapper.map(f, FranchiseDto.class))
+                .map(f -> modelMapper.map(f, FranchiseDTO.class))
                 .toList();
     }
 
     @Override
     @Transactional
-    public FranchiseResponseDto getFranchiseByIdWithDetails(Long id) {
-        FranchiseDto franchise = franchiseRepository.findFranchiseDtoById(id)
+    public FranchiseResponseDTO getFranchiseByIdWithDetails(Long id) {
+        FranchiseDTO franchise = franchiseRepository.findFranchiseDtoById(id)
                 .orElseThrow(() -> new EntityNotFoundException(FRANCHISE_NOT_FOUND));
 
         // TODO: Teams Dto will replace with entities
         List<Team> teams = franchiseRepository.findTeamRowsByFranchiseId(id)
                 .stream()
-                .map(FranchiseTeamRowDto::getTeam)
+                .map(FranchiseTeamRowDTO::getTeam)
                 .filter(Objects::nonNull)
                 .toList();
 
         // TODO: Tournament Dto will replace with entities
         List<Tournament> tournaments = franchiseRepository.findTournamentRowsByFranchiseId(id)
                 .stream()
-                .map(FranchiseTournamentRowDto::getTournament)
+                .map(FranchiseTournamentRowDTO::getTournament)
                 .filter(Objects::nonNull)
                 .toList();
 
-        return new FranchiseResponseDto(
+        return new FranchiseResponseDTO(
                 franchise.getId(),
                 franchise.getName(),
                 franchise.getCity(),
@@ -136,14 +136,14 @@ public class FranchiseServiceImpl implements FranchiseService {
 
     @Override
     @Transactional
-    public List<FranchiseResponseDto> getAllFranchisesWithDetails() {
-        List<FranchiseDto> franchises = franchiseRepository.findAllFranchiseDtos();
+    public List<FranchiseResponseDTO> getAllFranchisesWithDetails() {
+        List<FranchiseDTO> franchises = franchiseRepository.findAllFranchiseDtos();
         if (franchises.isEmpty()) {
             return List.of();
         }
 
         List<Long> franchiseIds = franchises.stream()
-                .map(FranchiseDto::getId)
+                .map(FranchiseDTO::getId)
                 .toList();
 
         // TODO: Teams Dto will replace with entities
@@ -173,7 +173,7 @@ public class FranchiseServiceImpl implements FranchiseService {
                 });
 
         return franchises.stream()
-                .map(franchise -> new FranchiseResponseDto(
+                .map(franchise -> new FranchiseResponseDTO(
                         franchise.getId(),
                         franchise.getName(),
                         franchise.getCity(),

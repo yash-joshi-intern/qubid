@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Response;
+package com.qubid.backend.dtos.response;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ContactDto {
+public class ContactDTO {
     private String phone;
     private String email;
     private String address;

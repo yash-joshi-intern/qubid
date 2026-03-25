@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Response;
+package com.qubid.backend.dtos.response;
 
 import com.qubid.backend.entities.Team;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FranchiseTeamRowDto {
+public class FranchiseTeamRowDTO {
     private Long franchiseId;
     private Team team;
 }

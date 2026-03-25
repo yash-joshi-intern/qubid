@@ -1,8 +1,8 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Request.TeamRequestDTO;
-import com.qubid.backend.dtos.Response.PlayerResponseDTO;
-import com.qubid.backend.dtos.Response.TeamResponseDTO;
+import com.qubid.backend.dtos.request.TeamRequestDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
 
 import java.util.List;
 

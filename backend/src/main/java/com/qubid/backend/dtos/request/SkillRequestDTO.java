@@ -1,4 +1,4 @@
-package com.qubid.backend.dtos.Request;
+package com.qubid.backend.dtos.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SkillRequestDto {
+public class SkillRequestDTO {
     private String name;
     private Integer rating;
     private Integer yearsOfExp;

@@ -1,7 +1,7 @@
 package com.qubid.backend.services;
 
-import com.qubid.backend.dtos.Request.AuctionPlayerRequestDTO;
-import com.qubid.backend.dtos.Response.AuctionPlayerDTO;
+import com.qubid.backend.dtos.request.AuctionPlayerRequestDTO;
+import com.qubid.backend.dtos.response.AuctionPlayerDTO;
 import com.qubid.backend.enums.AuctionPlayerStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;

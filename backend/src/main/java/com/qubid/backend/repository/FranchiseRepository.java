@@ -1,8 +1,8 @@
 package com.qubid.backend.repository;
 
-import com.qubid.backend.dtos.Response.FranchiseDto;
-import com.qubid.backend.dtos.Response.FranchiseTeamRowDto;
-import com.qubid.backend.dtos.Response.FranchiseTournamentRowDto;
+import com.qubid.backend.dtos.response.FranchiseDTO;
+import com.qubid.backend.dtos.response.FranchiseTeamRowDTO;
+import com.qubid.backend.dtos.response.FranchiseTournamentRowDTO;
 import com.qubid.backend.entities.Franchise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,12 +28,12 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
     List<Franchise> findByNameContainingIgnoreCase(String namePart);
 
     @Query("""
-            select new com.qubid.backend.dtos.Response.FranchiseDto(
+            select new com.qubid.backend.dtos.response.FranchiseDTO(
                 f.id,
                 f.name,
                 f.city,
                 f.country,
-                new com.qubid.backend.dtos.Response.ContactDto(
+                new com.qubid.backend.dtos.response.ContactDTO(
                     f.contact.phone,
                     f.contact.email,
                     f.contact.address
@@ -42,15 +42,15 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
             from Franchise f
             where f.id = :id
             """)
-    Optional<FranchiseDto> findFranchiseDtoById(@Param("id") Long id);
+    Optional<FranchiseDTO> findFranchiseDtoById(@Param("id") Long id);
 
     @Query("""
-            select new com.qubid.backend.dtos.Response.FranchiseDto(
+            select new com.qubid.backend.dtos.response.FranchiseDTO(
                 f.id,
                 f.name,
                 f.city,
                 f.country,
-                new com.qubid.backend.dtos.Response.ContactDto(
+                new com.qubid.backend.dtos.response.ContactDTO(
                     f.contact.phone,
                     f.contact.email,
                     f.contact.address
@@ -58,10 +58,10 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
             )
             from Franchise f
             """)
-    List<FranchiseDto> findAllFranchiseDtos();
+    List<FranchiseDTO> findAllFranchiseDtos();
 
     @Query("""
-            select new com.qubid.backend.dtos.Response.FranchiseTeamRowDto(
+            select new com.qubid.backend.dtos.response.FranchiseTeamRowDTO(
                 f.id,
                 t
             )
@@ -69,10 +69,10 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
             left join f.teams t
             where f.id = :franchiseId
             """)
-    List<FranchiseTeamRowDto> findTeamRowsByFranchiseId(@Param("franchiseId") Long franchiseId);
+    List<FranchiseTeamRowDTO> findTeamRowsByFranchiseId(@Param("franchiseId") Long franchiseId);
 
     @Query("""
-            select new com.qubid.backend.dtos.Response.FranchiseTournamentRowDto(
+            select new com.qubid.backend.dtos.response.FranchiseTournamentRowDTO(
                 f.id,
                 tr
             )
@@ -80,10 +80,10 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
             left join f.tournaments tr
             where f.id = :franchiseId
             """)
-    List<FranchiseTournamentRowDto> findTournamentRowsByFranchiseId(@Param("franchiseId") Long franchiseId);
+    List<FranchiseTournamentRowDTO> findTournamentRowsByFranchiseId(@Param("franchiseId") Long franchiseId);
 
     @Query("""
-            select new com.qubid.backend.dtos.Response.FranchiseTeamRowDto(
+            select new com.qubid.backend.dtos.response.FranchiseTeamRowDTO(
                 f.id,
                 t
             )
@@ -91,10 +91,10 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
             left join f.teams t
             where f.id in :franchiseIds
             """)
-    List<FranchiseTeamRowDto> findTeamRowsByFranchiseIds(@Param("franchiseIds") List<Long> franchiseIds);
+    List<FranchiseTeamRowDTO> findTeamRowsByFranchiseIds(@Param("franchiseIds") List<Long> franchiseIds);
 
     @Query("""
-            select new com.qubid.backend.dtos.Response.FranchiseTournamentRowDto(
+            select new com.qubid.backend.dtos.response.FranchiseTournamentRowDTO(
                 f.id,
                 tr
             )
@@ -102,5 +102,5 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
             left join f.tournaments tr
             where f.id in :franchiseIds
             """)
-    List<FranchiseTournamentRowDto> findTournamentRowsByFranchiseIds(@Param("franchiseIds") List<Long> franchiseIds);
+    List<FranchiseTournamentRowDTO> findTournamentRowsByFranchiseIds(@Param("franchiseIds") List<Long> franchiseIds);
 }

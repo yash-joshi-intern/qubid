@@ -2,9 +2,9 @@ package com.qubid.backend.services.impl;
 
 import com.qubid.backend.ExceptionHandler.PlayerNotFoundException;
 import com.qubid.backend.ExceptionHandler.TeamNotFoundException;
-import com.qubid.backend.dtos.Request.TeamRequestDTO;
-import com.qubid.backend.dtos.Response.PlayerResponseDTO;
-import com.qubid.backend.dtos.Response.TeamResponseDTO;
+import com.qubid.backend.dtos.request.TeamRequestDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
 import com.qubid.backend.entities.Player;
 import com.qubid.backend.entities.Team;
 import com.qubid.backend.repository.PlayerRepository;
@@ -59,7 +59,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     @Transactional(readOnly = true)
     public List<TeamResponseDTO> getListOfTeam(List<Long> teamIds) {
-        List<Team> teams = teamRepository.findAllByIds(teamIds);
+        List<Team> teams = teamRepository.findAllById(teamIds);
 
         if (teams.isEmpty()) {
             throw new RuntimeException("No teams found for given IDs");
@@ -90,6 +90,11 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     public String deleteTeam(Long teamId) {
         Team team = findTeamOrThrow(teamId);
+
+        List<Player> players = team.getPlayers();
+        players.forEach(player -> player.getTeams().remove(team));
+        playerRepository.saveAll(players);
+
         teamRepository.delete(team);
         return "Team deleted successfully";
     }
@@ -174,16 +179,25 @@ public class TeamServiceImpl implements TeamService {
     public String deleteListOfPlayerInTeam(Long teamId, List<Long> playerIds) {
         Team team = findTeamOrThrow(teamId);
 
-        // Only remove players that are actually in this team
-        boolean removed = team.getPlayers()
-                .removeIf(player -> playerIds.contains(player.getId()));
-        // boolean removeIf(Predicate<? super E> filter) --> loop over each element
+        List<Player> playersToRemove = playerRepository.findAllById(playerIds);
 
-        if (!removed) {
+        if (playersToRemove.isEmpty()) {
+            throw new RuntimeException("None of the given players found");
+        }
+
+        boolean anyRemoved = false;
+        for (Player player : playersToRemove) {
+            if (player.getTeams().contains(team)) {
+                player.getTeams().remove(team);
+                anyRemoved = true;
+            }
+        }
+
+        if (!anyRemoved) {
             throw new RuntimeException("None of the given players belong to team " + teamId);
         }
 
-        teamRepository.save(team);
+        playerRepository.saveAll(playersToRemove);
         return "Players removed from team successfully";
     }
 

@@ -2,11 +2,11 @@ package com.qubid.backend.services.impl;
 
 import com.qubid.backend.ExceptionHandler.PlayerNotFoundException;
 import com.qubid.backend.ExceptionHandler.TournamentNotFoundException;
-import com.qubid.backend.dtos.Request.PlayerRequestDTO;
-import com.qubid.backend.dtos.Response.PlayerResponseDTO;
-import com.qubid.backend.dtos.Response.SkillResponseDTO;
-import com.qubid.backend.dtos.Response.TeamResponseDTO;
-import com.qubid.backend.dtos.Response.TournamentResponseDTO;
+import com.qubid.backend.dtos.request.PlayerRequestDTO;
+import com.qubid.backend.dtos.response.PlayerResponseDTO;
+import com.qubid.backend.dtos.response.SkillResponseDTO;
+import com.qubid.backend.dtos.response.TeamResponseDTO;
+import com.qubid.backend.dtos.response.TournamentResponseDTO;
 import com.qubid.backend.entities.*;
 import com.qubid.backend.repository.*;
 import com.qubid.backend.services.PlayerService;
@@ -73,7 +73,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     @Transactional(readOnly = true)
     public List<PlayerResponseDTO> getListOfPlayer(List<Long> playerIdList) {
-        List<Player> players = playerRepository.findAllByIds(playerIdList);
+        List<Player> players = playerRepository.findAllById(playerIdList);
 
         if (players.isEmpty()) {
             throw new RuntimeException("No Players found by given list of IDs");
@@ -95,7 +95,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     @Transactional
     public String deleteListOfPlayer(List<Long> playerIDs) {
-        List<Player> players = playerRepository.findAllByIds(playerIDs);
+        List<Player> players = playerRepository.findAllById(playerIDs);
 
         if (players.isEmpty()) {
             throw new RuntimeException("No players found for given IDs");
