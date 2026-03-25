@@ -1,23 +1,25 @@
 package com.qubid.backend.dtos.Response;
 
-import com.qubid.backend.enums.AuctionPlayerStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PlayerLiveEventDTO {
-    private Long auctionPlayerId;
+public class BasePriceResponseDTO {
+    private Long id;
     private Long playerId;
-    private String firstName;
-    private String lastName;
-    private String country;
+    private String playerFirstName;
+    private String playerLastName;
+    private Long tournamentId;
+    private String tournamentName;
     private BigInteger basePrice;
-    private AuctionPlayerStatus status;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
