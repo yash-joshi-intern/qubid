@@ -3,10 +3,7 @@ package com.qubid.backend.entities;
 import com.qubid.backend.enums.CricketFormat;
 import com.qubid.backend.enums.HighestLevel;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
@@ -14,6 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Stats extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
