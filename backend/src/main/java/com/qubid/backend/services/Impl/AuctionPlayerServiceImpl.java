@@ -1,4 +1,4 @@
-package com.qubid.backend.services.impl;
+package com.qubid.backend.services.Impl;
 
 import com.qubid.backend.dtos.request.AuctionPlayerRequestDTO;
 import com.qubid.backend.dtos.response.AuctionPlayerDTO;
