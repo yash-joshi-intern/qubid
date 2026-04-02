@@ -1,9 +1,11 @@
-package com.qubid.backend.services.impl;
+package com.qubid.backend.services.Impl;
 
 import com.qubid.backend.ExceptionHandler.InsufficientPurseException;
 import com.qubid.backend.dtos.request.AuctionRequestDTO;
+import com.qubid.backend.dtos.request.EmailRequest.PlayerSoldEmailRequestDTO;
 import com.qubid.backend.dtos.request.PlaceBidRequestDTO;
 import com.qubid.backend.dtos.response.*;
+import com.qubid.backend.dtos.response.EmailResponse.PlayerSoldEmailResponseWrapper;
 import com.qubid.backend.entities.*;
 import com.qubid.backend.enums.AuctionPlayerStatus;
 import com.qubid.backend.enums.AuctionStatus;
@@ -12,9 +14,12 @@ import com.qubid.backend.services.AuctionService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +38,10 @@ public class AuctionServiceImpl implements AuctionService {
 
     private final SimpMessagingTemplate broker;
     private final TeamRepository teamRepository;
+    private final RestTemplate restTemplate;
+
+    @Value("${email-service}")
+    private String baseUrlForEmailService;
 
 
     @Override
@@ -217,6 +226,29 @@ public class AuctionServiceImpl implements AuctionService {
 
         broker.convertAndSend("/topic/auction/" + auctionId + "/sold", playerSoldEventDTO);
 
+        //send mail to player
+
+        PlayerSoldEmailRequestDTO playerSoldEmailRequestDTO = PlayerSoldEmailRequestDTO.builder()
+                .playerEmail(player.getContactDetails().getEmail())
+                .soldPrice(highestBid.getCurrentPrice())
+                .tournamentName(auction.getTournament().getName())
+                .playerName(player.getFirstName() + " " + player.getLastName())
+                .franchiseName(franchise.getName())
+                .build();
+        ResponseEntity<PlayerSoldEmailResponseWrapper> responseEntity
+                = restTemplate
+                .postForEntity(
+                        baseUrlForEmailService + "/player-sold",
+                        playerSoldEmailRequestDTO,
+                        PlayerSoldEmailResponseWrapper.class
+                );
+        //for testing of email send
+//        PlayerSoldEmailResponseWrapper apiResponse = responseEntity.getBody();
+//        EmailResponseDTO emailResponse = null;
+//        if (apiResponse != null) {
+//            emailResponse = apiResponse.getData();
+//        }
+//        System.out.println(emailResponse);
     }
 
     @Override
